@@ -1,13 +1,12 @@
+'''mermaid
 sequenceDiagram
     participant browser
     participant server
-
     
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/new_note
     activate server
     server-->>browser: HTML document/Redirect
     deactivate server
-
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     activate server
@@ -29,4 +28,5 @@ sequenceDiagram
     server-->>browser: [{content: "sdfa", date: "2024-11-28T21:49:08.454Z"}, … ]
     deactivate server   
 
-    Selain näyttää data.json tiedoston sisällön selaimessa 
+    Note right of browser: Selain näyttää data.json tiedoston sisällön selaimessa 
+'''

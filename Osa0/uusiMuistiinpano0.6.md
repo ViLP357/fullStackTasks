@@ -1,3 +1,4 @@
+'''mermaid
 sequenceDiagram
     participant browser
     participant server
@@ -7,4 +8,5 @@ sequenceDiagram
     server-->>browser: HTML document
     deactivate server
 
-    Selain lähettää vain yhden pyynnön
+    Note right of browser: Selain lähettää vain yhden pyynnön
+'''
