@@ -1,6 +1,5 @@
 ```mermaid
 sequenceDiagram
-graph TD;
 participant browser
 participant server
 
