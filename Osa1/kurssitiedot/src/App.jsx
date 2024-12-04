@@ -9,14 +9,23 @@ const Total = (props) => {
     <p>Number of exercises {props.total}</p>
   )
 }
+const Part = (props) => {
+  return (
+  //<p>{props.sisalto[0].osa} {props.sisalto[0].harjoitukset}</p>
+  //Console.Log(props)
+  <>
+  <p>{props.rivi.osa} {props.rivi.harjoitukset}</p>
+  </>
+  )
+}
 
 const Content = (props) => {
   return (
-    <>
-    <p>{props.sisalto[0].osa} {props.sisalto[0].harjoitukset}</p>
-    <p>{props.sisalto[1].osa} {props.sisalto[1].harjoitukset}</p>
-    <p>{props.sisalto[2].osa} {props.sisalto[2].harjoitukset}</p>
-    </>
+    <div>
+    <Part rivi = {props.sisalto[0]}/>
+    <Part rivi = {props.sisalto[1]}/>
+    <Part rivi = {props.sisalto[2]}/>
+    </div>
   )
 }
 
