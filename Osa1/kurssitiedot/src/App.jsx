@@ -28,26 +28,29 @@ const Content = (props) => {
 }
 
 const App = () => {
-  const course = 'Half Stack application development'
-  const parts = [
-    {
-      name: 'Fundamentals of React',
-      exercises: 10
-    },
-    {
-      name: 'Using props to pass data',
-      exercises: 7
-    },
-    {
-      name: 'State of a component',
-      exercises: 14
-    }
-  ]
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+    ]
+  }
+
   return (
     <div>
-      <Header kurssi = {course} />
-      <Content sisalto = {parts}/>
-      <Total total = {parts}/>
+      <Header kurssi = {course.name}/>
+      <Content sisalto = {course.parts}/>
+      <Total total = {course.parts}/>
     </div>
   )
 }
@@ -55,4 +58,4 @@ const App = () => {
 
 export default App
 
-//tämä on 1.3
+//tämä on 1.5
