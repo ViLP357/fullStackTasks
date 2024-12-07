@@ -1,6 +1,6 @@
 const Header = (props) => {
   return (
-    <h1>{props.course}</h1>
+    <h1>{props.kurssi}</h1>
   )
 }
 
@@ -11,10 +11,8 @@ const Total = (props) => {
 }
 const Part = (props) => {
   return (
-  //<p>{props.sisalto[0].osa} {props.sisalto[0].harjoitukset}</p>
-  //Console.Log(props)
   <>
-  <p>{props.rivi.osa} {props.rivi.harjoitukset}</p>
+  <p>{props.rivi.osa.name} {props.rivi.osa.exercises}</p>
   </>
   )
 }
@@ -31,28 +29,32 @@ const Content = (props) => {
 
 const App = () => {
   const course = 'Half Stack application development'
-  const part1 = 'Fundamentals of React'
-  const exercises1 = 10
-  const part2 = 'Using props to pass data'
-  const exercises2 = 7
-  const part3 = 'State of a component'
-  const exercises3 = 14
-  const osat = [
-    { osa: part1, harjoitukset: exercises1 },
-    { osa: part2, harjoitukset: exercises2 },
-    { osa: part3, harjoitukset: exercises3 }
-  ]
+  const part1 = {
+    name: 'Fundamentals of React',
+    exercises: 10
+  }
+  const part2 = {
+    name: 'Using props to pass data',
+    exercises: 7
+  }
+  const part3 = {
+    name: 'State of a component',
+    exercises: 14
+  }
 
+  const osat = [
+    {osa: part1}, {osa: part2}, {osa: part3}
+  ]
   return (
     <div>
-      <Header course = {course} />
+      <Header kurssi = {course} />
       <Content sisalto = {osat}/>
-      <Total total = {exercises1 + exercises2 + exercises3}/>
-
+      <Total total = {part1.exercises + part2.exercises + part3.exercises}/>
     </div>
   )
 }
 
 
 export default App
-//tämä on 1.1
+
+//tämä on 1.3
