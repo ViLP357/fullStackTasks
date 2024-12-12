@@ -1,5 +1,12 @@
 import { useState } from 'react'
 
+const StatisticLine = (props) => {
+  return (
+    <>
+    <p>{props.text} {props.value}</p>
+    </>
+  )
+  }
 const Statistics = (props) => {
   const Avarage = (props) => {
     return (
@@ -30,18 +37,25 @@ const Statistics = (props) => {
   }
   return (
       <div>
-      {console.log(props.kaikki)}
-      <p>{props.kaikki[0].hyvat}</p>
-      <p>{props.kaikki[1].neutraalit}</p>
-      <p>{props.kaikki[2].huonot}</p>
-      <Total arvostelut = {props.kaikki}/>
-      <Avarage arvostelut = {props.kaikki} />
-      <Positives arvostelut = {props.kaikki}/>
+      <StatisticLine text="good" value ={props.kaikki[0].hyvat}/>
+      <StatisticLine text = "neutral" value ={props.kaikki[1].neutraalit}/>
+      <StatisticLine text = "bad" value={props.kaikki[2].huonot}/>
+
+      <StatisticLine text = "All" value={props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit}/>
+      <StatisticLine text = "Avarage" value={(props.kaikki[0].hyvat + -(props.kaikki[2].huonot)) / (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit)}/>
+      <StatisticLine text = "Positives" value={(props.kaikki[0].hyvat) / (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit)}/>
       </div>
     )
 
 }
 
+const Button = ({handleClick, text}) => {
+  return (
+  <button onClick={handleClick}>
+    {text}
+  </button>
+  )
+}
 
 const App = () => {
   // tallenna napit omaan tilaansa
@@ -70,9 +84,9 @@ const values = [
   return (
     <div>
       <h1>Give feedback</h1>
-      <button onClick={handleGoodClick}>Good</button>
-      <button onClick={handleNeutralClick}>Neutral</button>
-      <button onClick={handleBadClick}>Bad</button>
+      <Button handleClick={handleGoodClick} text="good"/>
+      <Button handleClick={handleNeutralClick} text="neutral"/>
+      <Button handleClick={handleBadClick} text="bad"/>
       <h2>statistics</h2>
       <Statistics kaikki = {values}/>
     </div>
@@ -81,4 +95,4 @@ const values = [
 
 
 export default App
-//unicafe step4 1.9
+//unicafe step5 1.10
