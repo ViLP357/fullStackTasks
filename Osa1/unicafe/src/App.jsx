@@ -1,5 +1,39 @@
 import { useState } from 'react'
 
+const Statistics = (props) => {
+  const Avarage = (props) => {
+    return (
+      <>
+      <p>Avarage {(props.arvostelut[0].hyvat + -(props.arvostelut[2].huonot)) / (props.arvostelut[0].hyvat + props.arvostelut[2].huonot + props.arvostelut[1].neutraalit)}</p>
+      </>
+    )
+  }
+  const Total = (props) => {
+    return (
+      <>
+      <p>{props.arvostelut[0].hyvat + props.arvostelut[2].huonot + props.arvostelut[1].neutraalit}</p>
+      </>
+    )
+  }
+  const Positives = (props) => {
+    return (
+      <>
+      <p>Positive {(props.arvostelut[0].hyvat) / (props.arvostelut[0].hyvat + props.arvostelut[2].huonot + props.arvostelut[1].neutraalit)}</p>
+      </>
+    )
+  }
+
+  return (
+    <div>
+    {console.log(props.kaikki)}
+    <Total arvostelut = {props.kaikki}/>
+    <Avarage arvostelut = {props.kaikki} />
+    <Positives arvostelut = {props.kaikki}/>
+    </div>
+  )
+}
+
+
 const App = () => {
   // tallenna napit omaan tilaansa
   const [good, setGood] = useState(0)
@@ -17,28 +51,6 @@ const handleNeutralClick = () => {
 const handleBadClick = () => {
   setBad(bad + 1)
 }
-const Avarage = (props) => {
-  return (
-    <>
-    
-    <p>Avarage {(props.arvostelut[0].hyvat + -(props.arvostelut[2].huonot)) / (props.arvostelut[0].hyvat + props.arvostelut[2].huonot + props.arvostelut[1].neutraalit)}</p>
-    </>
-  )
-}
-const Total = (props) => {
-  return (
-    <>
-    <p>All {props.maara}</p>
-    </>
-  )
-}
-const Positives = (props) => {
-  return (
-    <>
-    <p>Positive {(props.kaikki[0].hyvat) / (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit)}</p>
-    </>
-  )
-}
 
 const values = [
   {hyvat: good},
@@ -55,13 +67,10 @@ const values = [
       <p>Good: {good}</p>
       <p>Neutral: {neutral}</p>
       <p>Bad: {bad}</p>
-
-      <Total maara = {good + bad + neutral}/>
-      <Avarage arvostelut = {values} />
-      <Positives kaikki = {values}/>
+      <Statistics kaikki = {values}/>
     </div>
   )
 }
 
 export default App
-//unicafe step2 1.7
+//unicafe step3 1.8
