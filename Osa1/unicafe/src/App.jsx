@@ -7,21 +7,44 @@ const App = () => {
   const [bad, setBad] = useState(0)
 
 const handleGoodClick = () => {
-  console.log("g")
   setGood(good + 1)
 }
 
 const handleNeutralClick = () => {
-  console.log("n")
   setNeutral(neutral + 1)
 }
 
 const handleBadClick = () => {
-  console.log("b")
   setBad(bad + 1)
 }
+const Avarage = (props) => {
+  return (
+    <>
+    
+    <p>Avarage {(props.arvostelut[0].hyvat + -(props.arvostelut[2].huonot)) / (props.arvostelut[0].hyvat + props.arvostelut[2].huonot + props.arvostelut[1].neutraalit)}</p>
+    </>
+  )
+}
+const Total = (props) => {
+  return (
+    <>
+    <p>All {props.maara}</p>
+    </>
+  )
+}
+const Positives = (props) => {
+  return (
+    <>
+    <p>Positive {(props.kaikki[0].hyvat) / (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit)}</p>
+    </>
+  )
+}
 
-
+const values = [
+  {hyvat: good},
+  {neutraalit: neutral},
+  {huonot: bad}
+]
   return (
     <div>
       <h1>Give feedback</h1>
@@ -32,9 +55,13 @@ const handleBadClick = () => {
       <p>Good: {good}</p>
       <p>Neutral: {neutral}</p>
       <p>Bad: {bad}</p>
+
+      <Total maara = {good + bad + neutral}/>
+      <Avarage arvostelut = {values} />
+      <Positives kaikki = {values}/>
     </div>
   )
 }
 
 export default App
-//unicafe step1 1.6
+//unicafe step2 1.7
