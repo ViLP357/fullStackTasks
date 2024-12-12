@@ -11,7 +11,7 @@ const Statistics = (props) => {
   const Total = (props) => {
     return (
       <>
-      <p>{props.arvostelut[0].hyvat + props.arvostelut[2].huonot + props.arvostelut[1].neutraalit}</p>
+      <p>All {props.arvostelut[0].hyvat + props.arvostelut[2].huonot + props.arvostelut[1].neutraalit}</p>
       </>
     )
   }
@@ -23,14 +23,14 @@ const Statistics = (props) => {
     )
   }
 
-  return (
-    <div>
-    {console.log(props.kaikki)}
-    <Total arvostelut = {props.kaikki}/>
-    <Avarage arvostelut = {props.kaikki} />
-    <Positives arvostelut = {props.kaikki}/>
-    </div>
-  )
+    return (
+      <div>
+      {console.log(props.kaikki)}
+      <Total arvostelut = {props.kaikki}/>
+      <Avarage arvostelut = {props.kaikki} />
+      <Positives arvostelut = {props.kaikki}/>
+      </div>
+    )
 }
 
 
@@ -57,6 +57,7 @@ const values = [
   {neutraalit: neutral},
   {huonot: bad}
 ]
+if (good + bad + neutral == 0) {
   return (
     <div>
       <h1>Give feedback</h1>
@@ -64,6 +65,18 @@ const values = [
       <button onClick={handleNeutralClick}>Neutral</button>
       <button onClick={handleBadClick}>Bad</button>
       <h2>statistics</h2>
+      <p>No feedback given</p>
+    </div>
+  )
+} 
+  return (
+    <div>
+      <h1>Give feedback</h1>
+      <button onClick={handleGoodClick}>Good</button>
+      <button onClick={handleNeutralClick}>Neutral</button>
+      <button onClick={handleBadClick}>Bad</button>
+      <h2>statistics</h2>
+      
       <p>Good: {good}</p>
       <p>Neutral: {neutral}</p>
       <p>Bad: {bad}</p>
