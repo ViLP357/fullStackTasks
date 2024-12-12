@@ -23,14 +23,23 @@ const Statistics = (props) => {
     )
   }
 
+  if (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit == 0) {
     return (
+      <p>No feedback given</p>
+    )
+  }
+  return (
       <div>
       {console.log(props.kaikki)}
+      <p>{props.kaikki[0].hyvat}</p>
+      <p>{props.kaikki[1].neutraalit}</p>
+      <p>{props.kaikki[2].huonot}</p>
       <Total arvostelut = {props.kaikki}/>
       <Avarage arvostelut = {props.kaikki} />
       <Positives arvostelut = {props.kaikki}/>
       </div>
     )
+
 }
 
 
@@ -57,7 +66,7 @@ const values = [
   {neutraalit: neutral},
   {huonot: bad}
 ]
-if (good + bad + neutral == 0) {
+
   return (
     <div>
       <h1>Give feedback</h1>
@@ -65,25 +74,11 @@ if (good + bad + neutral == 0) {
       <button onClick={handleNeutralClick}>Neutral</button>
       <button onClick={handleBadClick}>Bad</button>
       <h2>statistics</h2>
-      <p>No feedback given</p>
-    </div>
-  )
-} 
-  return (
-    <div>
-      <h1>Give feedback</h1>
-      <button onClick={handleGoodClick}>Good</button>
-      <button onClick={handleNeutralClick}>Neutral</button>
-      <button onClick={handleBadClick}>Bad</button>
-      <h2>statistics</h2>
-      
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
       <Statistics kaikki = {values}/>
     </div>
   )
-}
+} 
+
 
 export default App
-//unicafe step3 1.8
+//unicafe step4 1.9
