@@ -1,9 +1,12 @@
+//unicafe 1.11 step6
+
 import { useState } from 'react'
 
 const StatisticLine = (props) => {
   return (
     <>
-    <td><p>{props.text} {props.value}</p></td>
+    <td>{props.text}</td>
+    <td>{props.value}</td>
     </>
   )
   }
@@ -17,35 +20,13 @@ const Statistics = (props) => {
   }
   return (
       <table>
-      <tr>
-        <td>good</td>
-        <tr>{props.kaikki[0].hyvat}</tr>
-      </tr>
+      <tr><StatisticLine text="good" value ={props.kaikki[0].hyvat}/></tr>
+      <tr><StatisticLine text = "neutral" value ={props.kaikki[1].neutraalit}/></tr>
+      <tr><StatisticLine text = "bad" value={props.kaikki[2].huonot}/></tr>
 
-      <tr>
-      <td>Neutral</td>
-      <tr>{props.kaikki[1].neutraalit}</tr>
-      </tr>
-
-      <tr>
-      <td>Bad</td>
-      <tr>{props.kaikki[2].huonot}</tr>
-      </tr>
-
-      <tr>
-      <td>All</td>
-      <td>{props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit}</td>
-      </tr>
-
-      <tr>
-      <td>Average</td>
-      <td>{(props.kaikki[0].hyvat + -(props.kaikki[2].huonot)) / (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit)}</td>
-      </tr>
-
-      <tr>
-      <td>Positive</td>
-      <td>{(props.kaikki[0].hyvat) / (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit) * 100+ " %"}</td>
-      </tr>
+      <tr><StatisticLine text = "All" value={props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit}/></tr>
+      <tr><StatisticLine text = "Avarage" value={(props.kaikki[0].hyvat + -(props.kaikki[2].huonot)) / (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit)}/></tr>
+      <tr><StatisticLine text = "Positives" value={(props.kaikki[0].hyvat) / (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit)*100 + " %"}/></tr>
       </table>
 
     )
@@ -98,4 +79,4 @@ const values = [
 
 
 export default App
-//unicafe step5 1.10
+//unicafe step6 1.11
