@@ -3,32 +3,12 @@ import { useState } from 'react'
 const StatisticLine = (props) => {
   return (
     <>
-    <p>{props.text} {props.value}</p>
+    <td><p>{props.text} {props.value}</p></td>
     </>
   )
   }
 const Statistics = (props) => {
-  const Avarage = (props) => {
-    return (
-      <>
-      <p>Avarage {(props.arvostelut[0].hyvat + -(props.arvostelut[2].huonot)) / (props.arvostelut[0].hyvat + props.arvostelut[2].huonot + props.arvostelut[1].neutraalit)}</p>
-      </>
-    )
-  }
-  const Total = (props) => {
-    return (
-      <>
-      <p>All {props.arvostelut[0].hyvat + props.arvostelut[2].huonot + props.arvostelut[1].neutraalit}</p>
-      </>
-    )
-  }
-  const Positives = (props) => {
-    return (
-      <>
-      <p>Positive {(props.arvostelut[0].hyvat) / (props.arvostelut[0].hyvat + props.arvostelut[2].huonot + props.arvostelut[1].neutraalit)}</p>
-      </>
-    )
-  }
+
 
   if (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit == 0) {
     return (
@@ -36,15 +16,38 @@ const Statistics = (props) => {
     )
   }
   return (
-      <div>
-      <StatisticLine text="good" value ={props.kaikki[0].hyvat}/>
-      <StatisticLine text = "neutral" value ={props.kaikki[1].neutraalit}/>
-      <StatisticLine text = "bad" value={props.kaikki[2].huonot}/>
+      <table>
+      <tr>
+        <td>good</td>
+        <tr>{props.kaikki[0].hyvat}</tr>
+      </tr>
 
-      <StatisticLine text = "All" value={props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit}/>
-      <StatisticLine text = "Avarage" value={(props.kaikki[0].hyvat + -(props.kaikki[2].huonot)) / (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit)}/>
-      <StatisticLine text = "Positives" value={(props.kaikki[0].hyvat) / (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit)}/>
-      </div>
+      <tr>
+      <td>Neutral</td>
+      <tr>{props.kaikki[1].neutraalit}</tr>
+      </tr>
+
+      <tr>
+      <td>Bad</td>
+      <tr>{props.kaikki[2].huonot}</tr>
+      </tr>
+
+      <tr>
+      <td>All</td>
+      <td>{props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit}</td>
+      </tr>
+
+      <tr>
+      <td>Average</td>
+      <td>{(props.kaikki[0].hyvat + -(props.kaikki[2].huonot)) / (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit)}</td>
+      </tr>
+
+      <tr>
+      <td>Positive</td>
+      <td>{(props.kaikki[0].hyvat) / (props.kaikki[0].hyvat + props.kaikki[2].huonot + props.kaikki[1].neutraalit) * 100+ " %"}</td>
+      </tr>
+      </table>
+
     )
 
 }
