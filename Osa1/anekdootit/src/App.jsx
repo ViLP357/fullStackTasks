@@ -7,7 +7,15 @@ const App = () => {
     const copy = [...pisteet]
     copy[selected] += 1
     setPisteet(copy)
-    
+  }
+  const MaxVotesIndex = (list) => {
+    let maxIndex = 0;
+    for (let i = 1; i < list.length; i++) {
+      if (list[i] > list[maxIndex]) {
+        maxIndex = i
+      }
+    }
+    return maxIndex
   }
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -23,18 +31,38 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   //const pisteet = Array(anecdotes.length).fill(0)
   const [pisteet, setPisteet] = useState(Array(anecdotes.length).fill(0));
+  console.log(pisteet[MaxVotesIndex(pisteet)])
 
-  return (
+  if (pisteet[MaxVotesIndex(pisteet)] == 0) {
+    return (    
     <div>
-      
+      <h1>Anecdote of the day</h1>
       {anecdotes[selected]}
       <br></br>
       <p>has {pisteet[selected]} votes</p>
       <button onClick={ääni}>Vote</button>
       <button onClick={generate}>next</button>
+
+      <h2>Anecdote with most votes</h2>
+      <p>No votes</p>
+    </div>
+    )
+  }
+  return (
+    <div>
+      <h1>Anecdote of the day</h1>
+      {anecdotes[selected]}
+      <br></br>
+      <p>has {pisteet[selected]} votes</p>
+      <button onClick={ääni}>Vote</button>
+      <button onClick={generate}>next</button>
+
+      <h2>Anecdote with most votes</h2>
+      <p>{anecdotes[MaxVotesIndex(pisteet)]}</p>
+      <p>has {pisteet[MaxVotesIndex(pisteet)]} votes</p>
     </div>
   )
 }
 
 export default App
-//step 2 anekdootit 1.13
+//step 3 anekdootit 1.14
