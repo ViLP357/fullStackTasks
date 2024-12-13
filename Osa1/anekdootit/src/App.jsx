@@ -3,6 +3,12 @@ import { useState } from 'react'
 const App = () => {
   const generate = () => setSelected(Math.floor(Math.random() * anecdotes.length))
   
+  const ääni = () => {
+    const copy = [...pisteet]
+    copy[selected] += 1
+    setPisteet(copy)
+    
+  }
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -15,15 +21,20 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  //const pisteet = Array(anecdotes.length).fill(0)
+  const [pisteet, setPisteet] = useState(Array(anecdotes.length).fill(0));
 
   return (
     <div>
       
       {anecdotes[selected]}
       <br></br>
+      <p>has {pisteet[selected]} votes</p>
+      <button onClick={ääni}>Vote</button>
       <button onClick={generate}>next</button>
     </div>
   )
 }
 
 export default App
+//step 2 anekdootit 1.13
