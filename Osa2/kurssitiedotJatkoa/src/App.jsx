@@ -1,11 +1,16 @@
 const Course = (props) => {
   const header = props.course.name
  
-  const result = props.course.parts.map(osa => <li key = {osa.id}>{osa.name}</li>)
+  const result = props.course.parts.map(osa => <div key = {osa.id}>{osa.name} {osa.exercises}</div>)
+
+  const initialValue = 0
+  const total = props.course.parts.reduce( (s, value) => s +  value.exercises, initialValue,)
+  console.log(total)
   return (
     <>
     <h1>{header}</h1>
-    <ul>{result}</ul>
+    {result}
+    total of {total} exercises
     </>
   )
 }
@@ -41,4 +46,4 @@ const App = () => {
 }
 
 export default App
-//kurssitiedot step 6, 2.1
+//kurssitiedot step 8, 2.3
