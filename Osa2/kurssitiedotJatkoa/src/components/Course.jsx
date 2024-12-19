@@ -14,7 +14,7 @@ const Course = ({kurssinOsat}) => {
   }
   
   const Courses = ({courses}) => {
-    console.log("mm", courses)
+    
     const result = courses.map(kurssi => <div key = {kurssi.id}>{kurssi.name}</div>)
     const osat = courses.map(kurssi => <div key = {kurssi.id}>{kurssi.parts}</div>)
     //console.log("osia", osat)
