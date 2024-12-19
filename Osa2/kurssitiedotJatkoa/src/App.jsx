@@ -1,35 +1,5 @@
-const Course = ({kurssinOsat}) => {
-  //console.log("osat at course", kurssinOsat)
-  const initialValue = 0
-  const total = kurssinOsat.parts.reduce( (s, value) => s +  value.exercises, initialValue,)
-  //console.log(total)
-  return(
-    <>
-    <h3>{kurssinOsat.name}</h3>
-    {kurssinOsat.parts.map(osa => <div key = {osa.id}>{osa.name} {osa.exercises}</div>)}
-    <p>total of {total} exercises</p>
-    </>
 
-  )
-}
-
-const Courses = (props) => {
-
-  const result = props.courses.map(kurssi => <div key = {kurssi.id}>{kurssi.name}</div>)
-  const osat = props.courses.map(kurssi => <div key = {kurssi.id}>{kurssi.parts}</div>)
-  //console.log("osia", osat)
-
-  //console.log("osia", osat[0].props.children[0])
-
-  return (
-    <div>
-    <h1>Web development curriculum</h1>
-    {props.courses.map(kurssi => (
-      <Course key = {kurssi.id} kurssinOsat = {kurssi}/>
-    ))}
-    </div>
-  )
-}
+import Courses from './components/Course'
 
 const App = () => {
   const courses = [
@@ -74,7 +44,25 @@ const App = () => {
           id: 2
         }
       ]
-    }
+    },
+    {
+      name: 'Node.jsx',
+      id: 3,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 0,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
+    },
+
+    
   ]
 
   return (
@@ -85,4 +73,4 @@ const App = () => {
 }
 
 export default App
-//kurssitiedot step 9, 2.4
+//kurssitiedot step 10, 2.5
