@@ -1,74 +1,84 @@
-import { useState } from 'react'
+import { useState } from 'react';
+
+const Person = ({ person }) => (
+  <li>{person.name} {person.number}</li>
+);
+
+const PersonsToShow = ({ persons, filterInUse }) => {
+  const filteredPersons = filterInUse
+    ? persons.filter(person => person.name.toLowerCase().includes(filterInUse.toLowerCase()))
+    : persons
+
+  return (
+    <>
+      {filteredPersons.map(person => (
+        <li key={person.name}>
+          {person.name} {person.number}
+        </li>
+      ))}
+    </>
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas',
-      number: '+234 45325543'
-     }
-  ]) 
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  ])
 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [newFilter, setNewFilter] = useState('')
 
-  const lisaaHenkilo = (event) => {
+  const addPerson = (event) => {
     event.preventDefault()
-    const henkiloObject = {
-      name: newName,
-      number: newNumber
-    }
+    const personObject = { name: newName, number: newNumber }
 
-    var loytyy = false
-    for (let i = 0; i < persons.length; i++) {
-
-      if (persons[i].name == henkiloObject.name) {
-        alert(`${henkiloObject.name} is already added to phonebook`)
-        loytyy = true
-      }
-    }
-    if (loytyy == false) {
-      setPersons(persons.concat(henkiloObject))
-      setNewName("")
-      setNewNumber("")
+    if (persons.some(person => person.name === newName)) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      setPersons(persons.concat(personObject))
+      setNewName('')
+      setNewNumber('')
     }
   }
 
-  const handleNameChange = (event) => {
-    console.log(event.target.value)
-    setNewName(event.target.value)
-  }
+  const handleNameChange = (event) =>
+   setNewName(event.target.value);
+  const handleNumberChange = (event) => 
+    setNewNumber(event.target.value);
+  const handleFilterChange = (event) => 
+    setNewFilter(event.target.value);
 
-  const handleNumberChange = (event) => {
-    console.log(event.target.value)
-    setNewNumber(event.target.value)
-  }
-  
   return (
     <div>
       <h2>Phonebook</h2>
-
-      <form onSubmit={lisaaHenkilo}>
+      <form>
         <div>
-          name: <input
-           value={newName}
-           onChange={handleNameChange}/>
+          filter: <input value={newFilter} onChange={handleFilterChange} />
         </div>
-
+      </form>
+      <h3>Add a new</h3>
+      <form onSubmit={addPerson}>
         <div>
-          number: <input
-           value={newNumber}
-           onChange={handleNumberChange}/>
+          name: <input value={newName} onChange={handleNameChange} />
         </div>
-
+        <div>
+          number: <input value={newNumber} onChange={handleNumberChange} />
+        </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person => <div key = {person.name}>{person.name} {person.number}</div>)}
-  
+      <ul>
+        <PersonsToShow persons={persons} filterInUse={newFilter} />
+      </ul>
     </div>
   )
 }
 
-export default App
-//puhelinluettelo step3 2.8
+export default App;
+//puhelinluettelo 2.9 step4
