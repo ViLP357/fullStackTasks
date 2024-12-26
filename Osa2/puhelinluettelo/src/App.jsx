@@ -53,7 +53,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3002/persons')
+      .get('http://localhost:3001/persons')
       .then(response => {
         setPersons(response.data)
       })
@@ -71,6 +71,14 @@ const App = () => {
       setNewName('')
       setNewNumber('')
     }
+    axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+        console.log(response)
+        setPersons(persons.concat(response.data))
+        setNewName("")
+        setNewNumber("")
+      })
   }
 
   const handleNameChange = (event) =>
@@ -100,4 +108,4 @@ const App = () => {
 }
 
 export default App;
-//puhelinluettelo 2.10 step5
+//puhelinluettelo 2.12 step7
