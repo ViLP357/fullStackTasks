@@ -1,6 +1,6 @@
 import { useState , useEffect} from 'react'
 import axios from 'axios'
-
+import personService from './services/person'
 
 const Filter = ({newFilter, handleFilterChange}) => {
   return (
@@ -52,10 +52,10 @@ const App = () => {
   const [newFilter, setNewFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
@@ -71,13 +71,12 @@ const App = () => {
       setNewName('')
       setNewNumber('')
     }
-    axios
-      .post('http://localhost:3001/persons', personObject)
+    personService
+      .create(personObject)
       .then(response => {
-        console.log(response)
-        setPersons(persons.concat(response.data))
-        setNewName("")
+        setPersons(notes.concat(response.data))
         setNewNumber("")
+        setNewName("")
       })
   }
 
@@ -108,4 +107,4 @@ const App = () => {
 }
 
 export default App;
-//puhelinluettelo 2.12 step7
+//puhelinluettelo 2.13 step8
