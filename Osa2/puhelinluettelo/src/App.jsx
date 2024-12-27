@@ -38,10 +38,10 @@ const PersonsToShow = ({ persons, filterInUse, deletePerson }) => {
   return (
     <>
       {filteredPersons.map(person => (
-        <li key={person.name}>
+        <p key={person.name}>
           {person.name} {person.number}
           <button onClick={() => deletePerson(person.id)}>delete</button>
-        </li>
+        </p>
       ))}
     </>
   )
