@@ -1,6 +1,7 @@
 import { useState , useEffect} from 'react'
 import axios from 'axios'
 import personService from './services/person'
+import './index.css'
 
 const Filter = ({newFilter, handleFilterChange}) => {
   return (
@@ -9,6 +10,17 @@ const Filter = ({newFilter, handleFilterChange}) => {
     filter: <input value={newFilter} onChange={handleFilterChange} />
   </div>
 </form>
+  )
+}
+
+const Notification = ({message}) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className="error">
+      {message}
+    </div>
   )
 }
 
@@ -38,7 +50,7 @@ const PersonsToShow = ({ persons, filterInUse, deletePerson }) => {
   return (
     <>
       {filteredPersons.map(person => (
-        <p key={person.name}>
+        <p className="person" key={person.name}>
           {person.name} {person.number}
           <button onClick={() => deletePerson(person.id)}>delete</button>
         </p>
@@ -54,6 +66,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [infoMessage, setInfoMessage] = useState('')
 
   useEffect(() => {
     personService
@@ -69,6 +82,10 @@ const App = () => {
         personService.deletePerson(id)
           .then(() => {
             setPersons(persons.filter(person => person.id !== id))
+            setInfoMessage("poistaminen onnistui")
+            setTimeout(() => {
+              setInfoMessage(null)
+            }, 3000)
           })
           .catch(error => {
             console.error("Error deleting person:", error)
@@ -98,6 +115,10 @@ const App = () => {
         //console.log(persons)
         setNewName("")
         setNewNumber("")
+        setInfoMessage(`Henkilo ${response.name} numeron muutos onnistui`)
+        setTimeout(() => {
+          setInfoMessage(null)
+        }, 3000)
       })
       .catch(error => {
         alert(`the person was already deleted from server`)
@@ -114,6 +135,10 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+          setInfoMessage(`${returnedPerson.name} lisatty`)
+          setTimeout(() => {
+            setInfoMessage(null)
+          }, 3000)
         })
         .catch(error => {
           console.error('Error adding person:', error)
@@ -133,7 +158,8 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification message={infoMessage} />
       <Filter newFilter ={newFilter} 
         handleFilterChange={handleFilterChange}/>
 
@@ -151,4 +177,4 @@ const App = () => {
 }
 
 export default App;
-//puhelinluettelo 2.15 step10
+//puhelinluettelo 2.16 step11
