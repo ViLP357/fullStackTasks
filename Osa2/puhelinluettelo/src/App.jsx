@@ -82,31 +82,54 @@ const App = () => {
     const personObject = { name: newName, number: newNumber }
 
     if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-    } else {
-      setPersons(persons.concat(personObject))
+      alert(`${newName} is already added to phonebook, replace the old number with a new one?`)
+      //täällä step 10
+      //etsi oikea henkilö
+      const henkilo = persons.find((person) => person.name === newName)
+      //console.log("muutettava: ", henkilo)
+      const changedHenkilo = { ...henkilo, number: newNumber}
+      //console.log("muutettuna: ", changedHenkilo)
 
+      personService 
+      .update(henkilo.id, changedHenkilo)
+      .then(response => {
+        //console.log("here: ", response)
+        setPersons(persons.map(person => person.id !== henkilo.id ? person : response))
+        //console.log(persons)
+        setNewName("")
+        setNewNumber("")
+      })
+      .catch(error => {
+        alert(`the person was already deleted from server`)
+      })
+      
+
+    } else {
+        setPersons(persons.concat(personObject))
+
+      
+        personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+        .catch(error => {
+          console.error('Error adding person:', error)
+          alert('Error while adding person.')
+        })
     }
-    personService
-    .create(personObject)
-    .then(returnedPerson => {
-      setPersons(persons.concat(returnedPerson))
-      setNewName('')
-      setNewNumber('')
-    })
-    .catch(error => {
-      console.error('Error adding person:', error)
-      alert('Error while adding person.')
-    })
-  
   }
 
   const handleNameChange = (event) =>
-   setNewName(event.target.value);
+   setNewName(event.target.value)
   const handleNumberChange = (event) => 
-    setNewNumber(event.target.value);
+    setNewNumber(event.target.value)
   const handleFilterChange = (event) => 
-    setNewFilter(event.target.value);
+    setNewFilter(event.target.value)
+
+
 
   return (
     <div>
@@ -128,4 +151,4 @@ const App = () => {
 }
 
 export default App;
-//puhelinluettelo 2.14 step9
+//puhelinluettelo 2.15 step10
