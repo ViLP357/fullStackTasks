@@ -28,21 +28,25 @@ const PersonForm = ({addPerson, newName, newNumber, handleNameChange, handleNumb
   )
 }
 
-const PersonsToShow = ({ persons, filterInUse }) => {
+const PersonsToShow = ({ persons, filterInUse, deletePerson }) => {
+  //console.log("Persons data:", persons); // Tarkista konsolista, mitä dataa `persons` sisältää
+
   const filteredPersons = filterInUse
     ? persons.filter(person => person.name.toLowerCase().includes(filterInUse.toLowerCase()))
-    : persons
+    : persons;
 
   return (
     <>
       {filteredPersons.map(person => (
         <li key={person.name}>
           {person.name} {person.number}
+          <button onClick={() => deletePerson(person.id)}>delete</button>
         </li>
       ))}
     </>
   )
 }
+
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -58,7 +62,20 @@ const App = () => {
         setPersons(initialPersons)
       })
   }, [])
+  const deletePerson = (id) => {
+    console.log("poistetaan")
 
+      if (window.confirm(`Delete person with id${id}????`)) {
+        personService.deletePerson(id)
+          .then(() => {
+            setPersons(persons.filter(person => person.id !== id))
+          })
+          .catch(error => {
+            console.error("Error deleting person:", error)
+            alert("Failed to delete person.")
+          })
+      }
+    }
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -68,16 +85,20 @@ const App = () => {
       alert(`${newName} is already added to phonebook`)
     } else {
       setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+
     }
     personService
-      .create(personObject)
-      .then(response => {
-        setPersons(notes.concat(response.data))
-        setNewNumber("")
-        setNewName("")
-      })
+    .create(personObject)
+    .then(returnedPerson => {
+      setPersons(persons.concat(returnedPerson))
+      setNewName('')
+      setNewNumber('')
+    })
+    .catch(error => {
+      console.error('Error adding person:', error)
+      alert('Error while adding person.')
+    })
+  
   }
 
   const handleNameChange = (event) =>
@@ -100,11 +121,11 @@ const App = () => {
       <h2>Numbers</h2>
       <ul>
         <PersonsToShow persons={persons} 
-          filterInUse={newFilter} />
+          filterInUse={newFilter} deletePerson={deletePerson}/>
       </ul>
     </div>
   )
 }
 
 export default App;
-//puhelinluettelo 2.13 step8
+//puhelinluettelo 2.14 step9
