@@ -12,19 +12,42 @@ const Filter = ({newFilter, handleFilterChange}) => {
   )
 }
 
-const Country= ({filteredCountries}) => {
+const Country= ({filteredCountries, countryData, setCountryData}) => {
+  console.log(filteredCountries)
+  const name = filteredCountries[0].name.common
+  console.log(name)
+
+  countryService
+  .find(name)
+  .then(returnedData => {
+    setCountryData(returnedData)
+    //console.log(returnedData)
+    //console.log(returnedData.name.official)
+  })
   //console.log("ainoa: ", filteredCountries[0].name.common)
   return( 
-    <h2>
-      {filteredCountries[0].name.common}
-    </h2>
+    <div>
+      
+      <h2>
+        {filteredCountries[0].name.common}
+      </h2>
+      <p>capital: {countryData.capital}</p>
+      <p>area: {countryData.area}</p>
+      
+    </div>
   )
 }
-
-const CountriesToShow = ({countries, filterInUse}) => {
+//tee yläpuolelle seuraavaksi langiages
+const CountriesToShow = ({countries, filterInUse, countryData, setCountryData}) => {
   const filteredCountries = filterInUse
   ? countries.filter(country => country.name.common.toLowerCase().includes(filterInUse.toLowerCase()))
   : countries
+
+  if (filteredCountries.length === 0) {
+    return (
+      <p>Nothinf</p>
+    )
+  }
 
   if (filteredCountries.length > 10) {  
     return (
@@ -42,19 +65,18 @@ const CountriesToShow = ({countries, filterInUse}) => {
     </ul>
       )
     }
-  
-  //console.log("ennen: ", filteredCountries)
+
   return (
     <>
-    <Country filteredCountries = {filteredCountries}/>
+    <Country filteredCountries = {filteredCountries} countryData={countryData} setCountryData= {setCountryData}/>
     </>
   )
 }
 
-
 function App() {
   const [newFilter, setNewFilter] = useState("")
   const [countries, setCountries] = useState([])
+  const [countryData, setCountryData] = useState([])
 
   useEffect(() => {
     countryService
@@ -77,7 +99,7 @@ function App() {
     <Filter newFilter = {newFilter}
       handleFilterChange={handleFilterChange}/>
     <CountriesToShow countries={countries}
-      filterInUse={newFilter}/>
+      filterInUse={newFilter} countryData={countryData} setCountryData={setCountryData}/>
     </div>
   )
 }
