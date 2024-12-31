@@ -7,7 +7,7 @@ const getAll = () => {
 }
 
 const find = (name) => {
-    console.log(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`)
+    //console.log(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`)
     const request = axios.get(`${baseUrl}/name/${name}`)
     return request.then(response => response.data)
 }

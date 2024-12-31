@@ -13,10 +13,14 @@ const Filter = ({newFilter, handleFilterChange}) => {
 }
 
 const Country= ({filteredCountries, countryData, setCountryData}) => {
-  console.log(filteredCountries)
+  //console.log(filteredCountries)
   const name = filteredCountries[0].name.common
-  console.log(name)
-
+  //console.log(name)
+  //<ul>
+  //{countryData.languages(lan => (
+  //  <li key = {lan}>{lan}</li>
+  //))}
+//</ul>
   countryService
   .find(name)
   .then(returnedData => {
@@ -24,7 +28,17 @@ const Country= ({filteredCountries, countryData, setCountryData}) => {
     //console.log(returnedData)
     //console.log(returnedData.name.official)
   })
+  //console.log(countryData.languages)
   //console.log("ainoa: ", filteredCountries[0].name.common)
+  //<ul>
+  //{countryData.languages.map(lan => (
+  //  <li key = {lan}>{countryData[lan][0]}</li>
+  //))}
+
+
+  //</ul>
+  //console.log(countryData.languages["fin"])
+  if (countryData.languages != null) {
   return( 
     <div>
       
@@ -33,11 +47,23 @@ const Country= ({filteredCountries, countryData, setCountryData}) => {
       </h2>
       <p>capital: {countryData.capital}</p>
       <p>area: {countryData.area}</p>
+      <h5>Languages:</h5>
+
+      <ul>{Object.entries(countryData.languages)
+      .map( ([key, value]) => <li key = {key}>{value}</li>
+      )}</ul>
+
+      <img 
+      src={countryData.flags["png"]}
+      alt="new"
+      />
+
       
     </div>
   )
+  }
 }
-//tee yläpuolelle seuraavaksi langiages
+
 const CountriesToShow = ({countries, filterInUse, countryData, setCountryData}) => {
   const filteredCountries = filterInUse
   ? countries.filter(country => country.name.common.toLowerCase().includes(filterInUse.toLowerCase()))
