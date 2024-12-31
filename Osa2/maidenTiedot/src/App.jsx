@@ -15,29 +15,13 @@ const Filter = ({newFilter, handleFilterChange}) => {
 const Country= ({filteredCountries, countryData, setCountryData}) => {
   //console.log(filteredCountries)
   const name = filteredCountries[0].name.common
-  //console.log(name)
-  //<ul>
-  //{countryData.languages(lan => (
-  //  <li key = {lan}>{lan}</li>
-  //))}
-//</ul>
   countryService
   .find(name)
   .then(returnedData => {
     setCountryData(returnedData)
-    //console.log(returnedData)
-    //console.log(returnedData.name.official)
+
   })
-  //console.log(countryData.languages)
-  //console.log("ainoa: ", filteredCountries[0].name.common)
-  //<ul>
-  //{countryData.languages.map(lan => (
-  //  <li key = {lan}>{countryData[lan][0]}</li>
-  //))}
 
-
-  //</ul>
-  //console.log(countryData.languages["fin"])
   if (countryData.languages != null) {
   return( 
     <div>
@@ -57,17 +41,18 @@ const Country= ({filteredCountries, countryData, setCountryData}) => {
       src={countryData.flags["png"]}
       alt="new"
       />
-
-      
     </div>
   )
   }
 }
 
+
 const CountriesToShow = ({countries, filterInUse, countryData, setCountryData}) => {
   const filteredCountries = filterInUse
   ? countries.filter(country => country.name.common.toLowerCase().includes(filterInUse.toLowerCase()))
   : countries
+
+
 
   if (filteredCountries.length === 0) {
     return (
@@ -85,12 +70,14 @@ const CountriesToShow = ({countries, filterInUse, countryData, setCountryData}) 
       <ul>
       {filteredCountries.map(country => (
         <li key ={country.name.official}>
-          {country.name.common}
+          {country.name.common} 
+         
         </li>
       ))}
     </ul>
       )
     }
+
 
   return (
     <>
@@ -103,6 +90,7 @@ function App() {
   const [newFilter, setNewFilter] = useState("")
   const [countries, setCountries] = useState([])
   const [countryData, setCountryData] = useState([])
+
 
   useEffect(() => {
     countryService
