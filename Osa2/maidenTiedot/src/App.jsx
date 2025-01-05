@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import countryService from './services/countries'
-//import countries from './services/countries'
 
+//viimeistelyä icon vailla valmis
 const Filter = ({newFilter, handleFilterChange}) => {
   return (
     <form>
@@ -12,15 +12,35 @@ const Filter = ({newFilter, handleFilterChange}) => {
   )
 }
 
-const Country= ({filteredCountries, countryData, setCountryData}) => {
+const Country= ({filteredCountries, countryData, setCountryData, weatherData, setWeatherData}) => {
   //console.log(filteredCountries)
-  const name = filteredCountries[0].name.common
-  countryService
-  .find(name)
-  .then(returnedData => {
-    setCountryData(returnedData)
+  //
+  useEffect(() => {
+    if (filteredCountries.length === 1) {
+      const name = filteredCountries[0].name.common
 
-  })
+      // Hae maan tiedot
+      countryService.find(name).then((returnedData) => {
+        setCountryData(returnedData);
+      })
+
+      // Hae säätiedot
+      countryService
+        .getWeather(filteredCountries[0].capital[0], name)
+        .then((returnedData) => {
+          setWeatherData(returnedData)
+        })
+    }
+  }, [filteredCountries, setCountryData, setWeatherData])
+
+  // Odotetaan tietojen latautumista
+  if (!countryData || !countryData.languages) {
+    return <p>Ladataan maan tietoja...</p>
+  }
+
+  if (!weatherData) {
+    return <p>Ladataan säätietoja...</p>
+  }
 
   if (countryData.languages != null) {
   return( 
@@ -41,13 +61,17 @@ const Country= ({filteredCountries, countryData, setCountryData}) => {
       src={countryData.flags["png"]}
       alt="new"
       />
+      <h2>Weather in {countryData.capital[0]}
+      </h2>
+      <p>Temperature {(weatherData.main.temp) - 273.15} Celsius</p>
+      <p>wind {weatherData.wind.speed} m/s</p>
     </div>
   )
   }
 }
 
 
-const CountriesToShow = ({countries, filterInUse, countryData, setCountryData}) => {
+const CountriesToShow = ({countries, filterInUse, countryData, setCountryData, weatherData, setWeatherData}) => {
   const filteredCountries = filterInUse
   ? countries.filter(country => country.name.common.toLowerCase().includes(filterInUse.toLowerCase()))
   : countries
@@ -81,7 +105,7 @@ const CountriesToShow = ({countries, filterInUse, countryData, setCountryData}) 
 
   return (
     <>
-    <Country filteredCountries = {filteredCountries} countryData={countryData} setCountryData= {setCountryData}/>
+    <Country filteredCountries = {filteredCountries} countryData={countryData} setCountryData= {setCountryData} weatherData={weatherData} setWeatherData={setWeatherData}/>
     </>
   )
 }
@@ -89,7 +113,8 @@ const CountriesToShow = ({countries, filterInUse, countryData, setCountryData}) 
 function App() {
   const [newFilter, setNewFilter] = useState("")
   const [countries, setCountries] = useState([])
-  const [countryData, setCountryData] = useState([])
+  const [countryData, setCountryData] = useState(null)
+  const [weatherData, setWeatherData] = useState(null)
 
 
   useEffect(() => {
@@ -113,7 +138,7 @@ function App() {
     <Filter newFilter = {newFilter}
       handleFilterChange={handleFilterChange}/>
     <CountriesToShow countries={countries}
-      filterInUse={newFilter} countryData={countryData} setCountryData={setCountryData}/>
+      filterInUse={newFilter} countryData={countryData} setCountryData={setCountryData} weatherData={weatherData} setWeatherData={setWeatherData}/>
     </div>
   )
 }
