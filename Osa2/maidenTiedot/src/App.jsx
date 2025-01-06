@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import countryService from './services/countries'
 
 //viimeistelyä icon vailla valmis
@@ -13,23 +13,28 @@ const Filter = ({newFilter, handleFilterChange}) => {
 }
 
 const Country= ({filteredCountries, countryData, setCountryData, weatherData, setWeatherData}) => {
+  const previousCountry = useRef(null)
   //console.log(filteredCountries)
   //
   useEffect(() => {
     if (filteredCountries.length === 1) {
-      const name = filteredCountries[0].name.common
+      const selectedCountry = filteredCountries[0].name.common
 
-      // Hae maan tiedot
-      countryService.find(name).then((returnedData) => {
-        setCountryData(returnedData);
-      })
 
-      // Hae säätiedot
-      countryService
-        .getWeather(filteredCountries[0].capital[0], name)
-        .then((returnedData) => {
-          setWeatherData(returnedData)
+      if (previousCountry.current !== selectedCountry) {
+        previousCountry.current = selectedCountry
+
+
+        countryService.find(selectedCountry).then((returnedData) => {
+          setCountryData(returnedData)
         })
+
+        countryService
+          .getWeather(filteredCountries[0].capital[0], selectedCountry)
+          .then((returnedData) => {
+            setWeatherData(returnedData)
+          })
+      }
     }
   }, [filteredCountries, setCountryData, setWeatherData])
 
@@ -42,6 +47,8 @@ const Country= ({filteredCountries, countryData, setCountryData, weatherData, se
     return <p>Ladataan säätietoja...</p>
   }
 
+
+  
   if (countryData.languages != null) {
   return( 
     <div>
@@ -63,7 +70,14 @@ const Country= ({filteredCountries, countryData, setCountryData, weatherData, se
       />
       <h2>Weather in {countryData.capital[0]}
       </h2>
-      <p>Temperature {(weatherData.main.temp) - 273.15} Celsius</p>
+      <p>Temperature {((weatherData.main.temp) - 273.15).toFixed(2)} Celsius</p>
+
+      <img
+      src= {`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
+      
+      alt="new"
+      />
+
       <p>wind {weatherData.wind.speed} m/s</p>
     </div>
   )
@@ -122,8 +136,6 @@ function App() {
       .getAll()
       .then(initialCountries => {
         setCountries(initialCountries)
-        //console.log("initil: ", initialCountries)
-        //console.log("countries: ", countries)
       })
   }, [])
 
