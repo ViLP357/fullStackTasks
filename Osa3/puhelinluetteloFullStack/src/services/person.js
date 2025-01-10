@@ -1,6 +1,6 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/persons' //step12 
-//const baseUrl = 'http://localhost:3001/api/persons' //with backend
+//const baseUrl = 'http://localhost:3001/persons' //step12 
+const baseUrl = 'http://localhost:3001/api/persons' //with backend
 
 const getAll = () => {
   const request = axios.get(baseUrl)
