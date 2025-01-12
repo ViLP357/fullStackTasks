@@ -2,73 +2,11 @@ import { useState , useEffect} from 'react'
 import axios from 'axios'
 import personService from './services/person'
 import './index.css'
-
-const Filter = ({newFilter, handleFilterChange}) => {
-  return (
-  <form>
-  <div>
-    filter: <input value={newFilter} onChange={handleFilterChange} />
-  </div>
-</form>
-  )
-}
-
-const Notification = ({message}) => {
-  if (message === null) {
-    return null
-  }
-  return (
-    <div className="success">
-      {message}
-    </div>
-  )
-}
-const ErrorNotification = ({message}) => {
-  if (message === null) {
-    return null
-  }
-  return (
-    <div className="error">
-      {message}
-    </div>
-  )
-}
-
-const PersonForm = ({addPerson, newName, newNumber, handleNameChange, handleNumberChange}) => {
-  return (
-    <form onSubmit={addPerson}>
-    <div>
-      name: <input value={newName} onChange={handleNameChange} />
-    </div>
-    <div>
-      number: <input value={newNumber} onChange={handleNumberChange} />
-    </div>
-    <div>
-      <button type="submit">add</button>
-    </div>
-  </form>
-  )
-}
-
-const PersonsToShow = ({ persons, filterInUse, deletePerson }) => {
-  //console.log("Persons data:", persons); // Tarkista konsolista, mitä dataa `persons` sisältää
-
-  const filteredPersons = filterInUse
-    ? persons.filter(person => person.name.toLowerCase().includes(filterInUse.toLowerCase()))
-    : persons;
-
-  return (
-    <>
-      {filteredPersons.map(person => (
-        <p className="person" key={person.name}>
-          {person.name} {person.number}
-          <button onClick={() => deletePerson(person.id)}>delete</button>
-        </p>
-      ))}
-    </>
-  )
-}
-
+import PersonsToShow from './components/PersonsToShow'
+import PersonForm from './components/PersonForm'
+import Notification from  "./components/Notification"
+import ErrorNotification from  "./components/ErrorNotification"
+import Filter from "./components/Filter"
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -194,3 +132,4 @@ const App = () => {
 
 export default App;
 //puhelinluettelo 2.17 step12
+//Refaktoroitu
