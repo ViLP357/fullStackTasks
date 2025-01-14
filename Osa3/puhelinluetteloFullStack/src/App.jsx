@@ -1,5 +1,5 @@
 import { useState , useEffect} from 'react'
-import axios from 'axios'
+//import axios from 'axios'
 import personService from './services/person'
 import './index.css'
 import PersonsToShow from './components/PersonsToShow'
