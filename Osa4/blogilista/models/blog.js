@@ -1,18 +1,13 @@
 //tÄTÄ EI TARVITTU VIELÄ
-
 const mongoose = require("mongoose")
-mongoose.set('strictQuery, fslse')
-const url = process.env.MONGODB_URI
 
-console.log('connected to', url)
+//const url = process.env.MONGODB_URI
 
-mongoose.connect(url) 
-    .then(result => {
-        console.log("connected to MongoDb")
-    })
+//console.log('connected to', url)
 
-const personSchema = new mongoose.Schema({
-    author: { type: String
+const blogSchema = new mongoose.Schema({
+    author: { type: String,
+        require: true
     },
     title: {
           type: String,
@@ -20,10 +15,19 @@ const personSchema = new mongoose.Schema({
     url: {
         type: String
     }, 
-    votes: {
-        type: String
+    likes: {
+        type: Number
     }
     }
     )
 
+blogSchema.set("toJSON", {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
+    }
+})
+
 module.exports = mongoose.model('Blog', blogSchema)
+
