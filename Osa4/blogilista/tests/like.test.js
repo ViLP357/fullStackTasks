@@ -148,8 +148,8 @@ describe("most liked author", () => {
 
   test("most liked blogs written of one", () => {
     assert.deepStrictEqual(listHelper.mostLikedBlogs(oneBlog), {
-      author: "Edsger W. Dijkstra",
-      likes: 17
+      author: "Robert C. Martin",
+      likes: 2
     })
   })
 

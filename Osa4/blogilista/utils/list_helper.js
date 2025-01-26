@@ -53,7 +53,7 @@ const mostLikedBlogs = (blogs) => {
 
   var authorsAndLikes = []
   const authors = blogs.map(blog => blog.author)
-  console.log(authors.length)
+  //console.log(authors.length)
   for (let i =0; i < authors.length; i++) {
     //console.log(i)
     const blogsByTheAuthor = blogs.filter(blog => blog.author === authors[i])
@@ -67,6 +67,7 @@ const mostLikedBlogs = (blogs) => {
 
   let max_val =
     _.maxBy(authorsAndLikes, 'likes')
+  //console.log(max_val)
  
   return max_val
 }
