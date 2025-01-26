@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const dummy = (blogs) => {
     return 1
   }
@@ -19,15 +21,35 @@ const mostLikes = (blogs) => {
     return 0
   }
   const likes = blogs.map(blog => blog.likes)
-  //console.log(likes)
   suurin =  Math.max(...likes)
   const mostLikedBlogs = blogs.filter(blog => blog.likes === suurin)
-  //console.log(mostLikedBlogs)
   return mostLikedBlogs[0]
 }
+
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0) {
+    return 0
+  }
+  const authors = blogs.map(blog => blog.author)
+  let numberOfAuthor = _.countBy(authors)
+  console.log(numberOfAuthor)
+  //console.log(Math.max())
+  var suurinMaara = 0
+  var suurinAuthor = {}
+  for (var key in numberOfAuthor) {
+    if (numberOfAuthor[key] >= suurinMaara) {
+      suurinMaara = numberOfAuthor[key]
+      suurinAuthor = key
+    }
+  }
+  console.log(suurinAuthor, suurinMaara)
   
+  return {"author": suurinAuthor, "blogs": suurinMaara}
+}
+ 
 module.exports = {
     dummy,
     totalLikes,
-    mostLikes
+    mostLikes,
+    mostBlogs
   }
