@@ -137,4 +137,24 @@ describe("most blogs", () => {
     assert.deepStrictEqual(listHelper.mostBlogs(empty), 0)
   })
 })
-//4.6
+
+describe("most liked author", () => {
+  test("most liked blogs written of many", () => {
+    assert.deepStrictEqual(listHelper.mostLikedBlogs(blogs), {
+      author: "Edsger W. Dijkstra",
+      likes: 17
+    })
+  })
+
+  test("most liked blogs written of one", () => {
+    assert.deepStrictEqual(listHelper.mostLikedBlogs(oneBlog), {
+      author: "Robert C. Martin",
+      likes: 2
+    })
+  })
+
+  test("most liked blogs written of none", () => {
+    assert.deepStrictEqual(listHelper.mostLikedBlogs(empty), 0)
+  })
+})
+//4.7
