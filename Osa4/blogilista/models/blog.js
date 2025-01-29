@@ -7,18 +7,21 @@ const mongoose = require("mongoose")
 
 const blogSchema = new mongoose.Schema({
     author: { type: String,
-        require: true
+        required: true
     },
     title: {
           type: String,
+          required: true
     },
     url: {
-        type: String
+        type: String,
+        required: true
     }, 
     likes: {
         type: Number,
-        require: true,
-        set: val => val === null || val.length === 0 ? 0 : val
+        //required: true,
+        default: 0,
+        set: val => val === null ? 0 : val 
     }
     }
     )

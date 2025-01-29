@@ -25,12 +25,15 @@ const nullBlog = [{
     url: "www.notReady",
     likes: null
   }]
-
+const mistakeBlog = [{
+    author: "Testitestaaja",
+    likes: 6
+  }];
 const notesInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
 }
 
 module.exports = {
-  initialBlogs, nullBlog, notesInDb
+  initialBlogs, nullBlog, mistakeBlog, notesInDb
 }

@@ -40,17 +40,18 @@ test("blogs have id not _id", async () => {
   )
 })
 
-test("blogs can be post into /api/blogs", async () => {
-  const test_blog = {
+test.only("blogs can be post into /api/blogs", async () => {
+  const test_blog = new Blog({
     author: "Testitestaaja",
     title: "Testailua",
-    likes: 6,
+    likes: 6,  // Varmista, että likes ei ole null
     url: "www.notReady"
-  }
+  });
+  
 
   await api
   .post('/api/blogs')
-  .send(test_blog)
+  .send(test_blog.toObject())
   .expect(201)
   .expect("Content-Type", /application\/json/)
 
@@ -63,12 +64,15 @@ test("blogs can be post into /api/blogs", async () => {
 })
 
 test.only("likes null is 0", async () => {
-  //console.log(helper.nullBlog)
-  const test_blog = new Blog(helper.nullBlog[0])
-  //console.log(test_blog)
+  const test_blog = new Blog( {
+    author: "Testitestaaja",
+    title: "Testailua",
+    likes: null,
+    url: "www.notReady"
+  })
   await api
   .post('/api/blogs')
-  .send(test_blog)
+  .send(test_blog.toObject())
   .expect(201)
   .expect("Content-Type", /application\/json/)
 
@@ -78,6 +82,22 @@ test.only("likes null is 0", async () => {
   //console.log(result)
   assert.strictEqual(result.length, 0)
 })
+
+test.only('blogi ilman titlea ja url:ia ei mene läpi', async () => {
+  const invalidBlog = {
+    author: "Testitestaaja",
+    likes: 5
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(invalidBlog)
+    .expect(400) // Odotetaan 400 Bad Request -virhe
+
+  expect(response.body.error).toContain('Title is required')
+  expect(response.body.error).toContain('URL is required')
+})
+  // Varmistaa, että virheilmoitus liittyy titleen tai URL:iin);
 
 after(async () => {
   await mongoose.connection.close()

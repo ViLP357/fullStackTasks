@@ -7,12 +7,8 @@ blogsRouter.get('/', async (request, response) => {
   response.json(blogs)
 })
   
-blogsRouter.post('/', (request, response) => {
-    //if (request.body.likes === null || request.body.likes.length === 0) {
-      //console.log("fail null")
-      //request.body.likes = 0
-      //console.log(request.body)
-    //}
+blogsRouter.post('/', async (request, response) => {
+  try {
     const blog = new Blog(request.body)
   
     blog
@@ -20,6 +16,9 @@ blogsRouter.post('/', (request, response) => {
       .then(result => {
         response.status(201).json(result)
       })
+    } catch (error) {
+      next(error)
+    }
   })
 
 module.exports = blogsRouter
