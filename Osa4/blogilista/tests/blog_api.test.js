@@ -30,7 +30,7 @@ test("blogs are returned as json", async () => {
   .expect('Content-Type', /application\/json/)
 })
 
-test.only("blogs have id not _id", async () => {
+test("blogs have id not _id", async () => {
   const response = await api.get("/api/blogs")
   //console.log(response)
   response.body.map(blog => 
@@ -38,6 +38,28 @@ test.only("blogs have id not _id", async () => {
     assert.strictEqual(_.has(blog, 'id'), true)
     // loytyy =  _.has(dependsOn, id)
   )
+})
+
+test.only("blogs can be post into /api/blogs", async () => {
+  const test_blog = {
+    author: "Testitestaaja",
+    title: "Testailua",
+    likes: "5",
+    url: "www.notReady"
+  }
+
+  await api
+  .post('/api/blogs')
+  .send(test_blog)
+  .expect(201)
+  .expect("Content-Type", /application\/json/)
+
+  const response = await api.get("/api/blogs")
+
+  const contents = response.body.map(r => r.title)
+  assert(contents.includes("Testailua"))
+  
+  assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
 })
 
 after(async () => {
