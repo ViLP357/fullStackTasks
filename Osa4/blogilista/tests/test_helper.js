@@ -16,8 +16,15 @@ const initialBlogs = [
       url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
       likes: 5,
       __v: 0
-    }
+    },
+    
 ]
+const nullBlog = [{
+    author: "Testitestaaja",
+    title: "Testailua",
+    url: "www.notReady",
+    likes: null
+  }]
 
 const notesInDb = async () => {
   const blogs = await Blog.find({})
@@ -25,5 +32,5 @@ const notesInDb = async () => {
 }
 
 module.exports = {
-  initialBlogs, notesInDb
+  initialBlogs, nullBlog, notesInDb
 }

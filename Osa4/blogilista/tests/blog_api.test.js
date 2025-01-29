@@ -5,7 +5,7 @@ const supertest = require('supertest')
 const app = require('../app')
 
 const api = supertest(app)
-const helper = require('./test_helper.test.js')
+const helper = require('./test_helper.js')
 
 const Blog = require('../models/blog')
 const _ = require('lodash');
@@ -40,11 +40,11 @@ test("blogs have id not _id", async () => {
   )
 })
 
-test.only("blogs can be post into /api/blogs", async () => {
+test("blogs can be post into /api/blogs", async () => {
   const test_blog = {
     author: "Testitestaaja",
     title: "Testailua",
-    likes: "5",
+    likes: 6,
     url: "www.notReady"
   }
 
@@ -60,6 +60,23 @@ test.only("blogs can be post into /api/blogs", async () => {
   assert(contents.includes("Testailua"))
   
   assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
+})
+
+test.only("likes null is 0", async () => {
+  //console.log(helper.nullBlog)
+  const test_blog = new Blog(helper.nullBlog[0])
+  //console.log(test_blog)
+  await api
+  .post('/api/blogs')
+  .send(test_blog)
+  .expect(201)
+  .expect("Content-Type", /application\/json/)
+
+  const response = await api.get("/api/blogs")
+
+  const result = response.body.filter(blog => blog.likes === null)
+  //console.log(result)
+  assert.strictEqual(result.length, 0)
 })
 
 after(async () => {
