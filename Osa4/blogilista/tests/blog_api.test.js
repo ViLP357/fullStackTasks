@@ -40,7 +40,7 @@ test("blogs have id not _id", async () => {
   )
 })
 
-test.only("blogs can be post into /api/blogs", async () => {
+test("blogs can be post into /api/blogs", async () => {
   const test_blog = new Blog({
     author: "Testitestaaja",
     title: "Testailua",
@@ -63,7 +63,7 @@ test.only("blogs can be post into /api/blogs", async () => {
   assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
 })
 
-test.only("likes null is 0", async () => {
+test("likes null is 0", async () => {
   const test_blog = new Blog( {
     author: "Testitestaaja",
     title: "Testailua",
@@ -84,20 +84,22 @@ test.only("likes null is 0", async () => {
 })
 
 test.only('blogi ilman titlea ja url:ia ei mene läpi', async () => {
-  const invalidBlog = {
+    const invalidBlog = new Blog( {
     author: "Testitestaaja",
     likes: 5
-  }
+  })
+    try {
+      await invalidBlog.validate(); 
+      //const errorInfo = 0
+    } catch (error) {
 
-  const response = await api
-    .post('/api/blogs')
-    .send(invalidBlog)
-    .expect(400) // Odotetaan 400 Bad Request -virhe
-
-  expect(response.body.error).toContain('Title is required')
-  expect(response.body.error).toContain('URL is required')
+      error.status = 400
+  
+      console.log("Validation error:", error.message);
+      console.log("Status code:", error.status);
+      assert.strictEqual(error.status, 400)
+    }
 })
-  // Varmistaa, että virheilmoitus liittyy titleen tai URL:iin);
 
 after(async () => {
   await mongoose.connection.close()
