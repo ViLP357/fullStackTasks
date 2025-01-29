@@ -8,6 +8,8 @@ const api = supertest(app)
 const helper = require('./test_helper.test.js')
 
 const Blog = require('../models/blog')
+const _ = require('lodash');
+
 beforeEach(async () => {
     await Blog.deleteMany({})
   
@@ -18,18 +20,24 @@ beforeEach(async () => {
     await blogObject.save()
   })
 
-test.only('right amount of blogs is returned', async () => {
+test('right amount of blogs is returned', async () => {
     const response = await api.get("/api/blogs")
-    //console.log(response.body)
-    //.expect("Content-Type", /application\/json/)
-   // assert.strictEqual(response, application/json)
-    //response.expect('Content-Type', /application\/json/)
     assert.strictEqual(response.body.length, 2)
 })
-test.only("blogs are returned as json", async () => {
+test("blogs are returned as json", async () => {
   await api
   .get("/api/blogs")
   .expect('Content-Type', /application\/json/)
+})
+
+test.only("blogs have id not _id", async () => {
+  const response = await api.get("/api/blogs")
+  //console.log(response)
+  response.body.map(blog => 
+    //console.log(_.has(blog, "id")),
+    assert.strictEqual(_.has(blog, 'id'), true)
+    // loytyy =  _.has(dependsOn, id)
+  )
 })
 
 after(async () => {
