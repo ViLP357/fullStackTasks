@@ -10,6 +10,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "chai": "^5.1.2",
         "cors": "^2.8.5",
         "dotenv": "^16.4.7",
         "express": "^4.21.2",
@@ -19,7 +20,9 @@
     },
     "devDependencies": {
         "cross-env": "^7.0.3",
+        "mocha": "^11.1.0",
         "nodemon": "^3.1.9",
+        "sinon": "^19.0.2",
         "supertest": "^7.0.0"
     }
 }

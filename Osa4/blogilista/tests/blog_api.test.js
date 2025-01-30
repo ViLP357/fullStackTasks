@@ -9,6 +9,9 @@ const helper = require('./test_helper.js')
 
 const Blog = require('../models/blog')
 const _ = require('lodash');
+const { errorHandler } = require('../utils/middleware.js')
+const sinon = require("sinon")
+const { expect } = require("chai")
 
 beforeEach(async () => {
     await Blog.deleteMany({})
@@ -84,20 +87,38 @@ test("likes null is 0", async () => {
 })
 
 test.only('blogi ilman titlea ja url:ia ei mene läpi', async () => {
-    const invalidBlog = new Blog( {
-    author: "Testitestaaja",
-    likes: 5
-  })
+    let req = {}
+    let res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub()
+    } 
+    let next = sinon.stub()
+
+    const testBlog =  {
+      author: "Testitestaaja",
+      likes: 5,
+      //url: "n",
+      //title: "notre"
+    }
     try {
-      await invalidBlog.validate(); 
+      //await invalidBlog.validate(); 
+      const invalidBlog = new Blog(testBlog)
+      await api
+        .post('/api/blogs')
+        .send(invalidBlog.toObject())
+
+        .expect(400)
+      //.expect("Content-Type", /application\/json/)
       //const errorInfo = 0
+      console.log("succees")
+      //expect(response.status).to.be.equal(400)
     } catch (error) {
 
-      error.status = 400
-  
-      console.log("Validation error:", error.message);
-      console.log("Status code:", error.status);
-      assert.strictEqual(error.status, 400)
+      errorHandler(error, req, res, next)
+      //console.log((res.status.calledWith(400)).to.be.true)
+      //console.log("er: ")
+      expect(res.status.calledWith(400)).to.be.true
+      //assert.strictEqual(res.status.calledWith(400).to.be.true, true)
     }
 })
 
