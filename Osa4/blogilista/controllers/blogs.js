@@ -16,7 +16,7 @@ blogsRouter.get('/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 blogsRouter.post('/', async (request, response, next) => {
-  const { title, url, author, likes } = request.body;
+  const { title, url, author, likes } = request.body
     if (!title || !url) {
         return response.status(400).json({ error: 'title and url are required' });
     } 
@@ -37,15 +37,38 @@ blogsRouter.delete("/:id", async (request, response) => {
   response.status(204).end()
 })
 
-blogsRouter.put("/:id", async () => {
+blogsRouter.put("/:id", async (request, response) => {
   //const body = request.body
+  //console.log(request.body)
+  //console.log(request.params)
+  const body = request.body
+  const blog = {
+    author: body.author,
+    title: body.title,
+    likes: body.likes,
+    url: body.url,
+    id: body.id
+  }
 
-  const blog = { author, title, url} = request.body
-  Blog.findByIdAndUpdate(request.params.id, blog, {likes: request.params.number, runValidators: true, context: "query"} )
-  .then(updatedBlog => {
-    response.json(updatedBlog)
-  })
-  .catch(error => next(error))
+  try {
+    const blogToUpdate = await Blog.findById(body.id)
+    if (!blogToUpdate) {
+      console.log("Not found here 4")
+      return response.status(404).json({ error: "Blog not found täällä 2" })
+    }
+    console.log("jatketaan")
+
+    const updatedBlog = await Blog.findByIdAndUpdate(body.id, blog, { new: true })
+    console.log(updatedBlog)
+    if (updatedBlog) {
+      response.status(200).json(updatedBlog)  // Käytä 200, koska tämä on päivitys
+    } else {
+      console.log("404 fail täällä")
+      response.status(404).json({ error: "Blog not found" })
+    }
+  } catch (error) {
+    next(error)
+  }
   
 }
 )

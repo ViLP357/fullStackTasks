@@ -13,18 +13,17 @@ const { errorHandler } = require('../utils/middleware.js')
 const sinon = require("sinon")
 const { expect } = require("chai")
 
+beforeEach(async () => {
+  await Blog.deleteMany({})
+
+  let blogObject = new Blog(helper.initialBlogs[0])
+  await blogObject.save()
+
+  blogObject = new Blog(helper.initialBlogs[1])
+  await blogObject.save()
+})
 describe('Initially saved notes and data validation', () => {
-  beforeEach(async () => {
-      await Blog.deleteMany({})
-    
-      let blogObject = new Blog(helper.initialBlogs[0])
-      await blogObject.save()
-    
-      blogObject = new Blog(helper.initialBlogs[1])
-      await blogObject.save()
-    })
-
-
+ 
   test('right amount of blogs is returned', async () => {
       const response = await api.get("/api/blogs")
       assert.strictEqual(response.body.length, 2)
@@ -129,7 +128,7 @@ describe("Tests about post", () => {
 })
 
 describe("Tests about delete and put", () => {
-  test.only("delete works", async () => {
+  test("delete works", async () => {
     const blogsAtBeginning = await helper.blogsInDb()
     const blogToDelete = blogsAtBeginning[0]
     await api
@@ -141,7 +140,29 @@ describe("Tests about delete and put", () => {
     assert.strictEqual(blogsAtTheEnd.length, blogsAtBeginning.length -1)
     const contents = blogsAtTheEnd.map(r => r.content)
     assert(!contents.includes(blogToDelete.title))
+  })
 
+  test.only("put works", async () => {
+    
+    const blogsAtBeginning = await helper.blogsInDb()
+    const updatedBlog = {
+      author: "Edsger W. Dijkstra",
+      title: "Go To Statement Considered Harmful",
+      url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+      likes:8,
+      id: "5a422aa71b54a676234d17f8"
+    }
+
+    const blogToUpdate =  await Blog.findById(updatedBlog.id)
+    //console.log("id:", updatedBlog.id)
+    const response = await api
+    .put(`/api/blogs/${updatedBlog.id}`)
+    .send(updatedBlog)
+    .expect(200)
+
+    const blogsAtTheEnd = await helper.blogsInDb()
+    assert(!blogsAtTheEnd.includes(blogToUpdate))
+    assert.strictEqual(blogsAtTheEnd.length, blogsAtBeginning.length)
   })
 })
 after(async () => {
