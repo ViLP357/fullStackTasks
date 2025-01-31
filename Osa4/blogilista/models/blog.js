@@ -1,11 +1,7 @@
 //tÄTÄ EI TARVITTU VIELÄ
 const mongoose = require("mongoose")
 
-//const url = process.env.MONGODB_URI
-
-//console.log('connected to', url)
-
-const blogSchema = new mongoose.Schema({
+const blogSchema =new mongoose.Schema({
     author: { type: String,
         required: true
     },
@@ -22,6 +18,10 @@ const blogSchema = new mongoose.Schema({
         //required: true,
         default: 0,
         set: val => val === null ? 0 : val 
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }
     }
     )
