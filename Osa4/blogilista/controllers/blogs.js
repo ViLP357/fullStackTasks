@@ -5,10 +5,11 @@ const User = require('../models/user')
 
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog.find({}).populate("user", {name: 1, username: 1 })
   response.json(blogs)
 })
   
+//huom! yksittäisen blogin näyttäjällä ei ole populatea
 blogsRouter.get('/:id', (request, response, next) => {
   const id = request.params.id
   Blog.findById(id).then(blog => {
