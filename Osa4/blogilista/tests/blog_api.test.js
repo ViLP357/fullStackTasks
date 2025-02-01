@@ -201,7 +201,7 @@ describe('when there is initially one user at db', () => {
     assert(usernames.includes(newUser.username))
   })
 
-  test('creation fails with proper statuscode and message if username already taken', async () => {
+  test.only('creation fails with proper statuscode and message if username already taken', async () => {
     let req = {}
       let res = {
         status: sinon.stub().returnsThis(),
@@ -230,7 +230,8 @@ describe('when there is initially one user at db', () => {
       console.log("Response status calls:", res.status.args);
 
       expect(res.status.calledWith(400)).to.be.true;
-      assert.strictEqual(usersAtEnd.length, usersAtStart.length);
+      assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+      assert(res.includes("User validation failed: username: Path `username`")) //pitäsikö ehlä olla res.json tai joku muu viittaus error messageen
   }
   })
 
@@ -253,15 +254,15 @@ describe('when there is initially one user at db', () => {
     console.log("Starting test...");
     
     await api.post('/api/users').send(newUser).expect(400);
-
-    console.log("Test failed (should not reach here)");
   } catch (error) {
       console.log("Error caught:", error);
       errorHandler(error, req, res, next);
       const usersAtEnd = await helper.usersInDb();  // Käyttäjät, ei blogit
       console.log("Response status calls:", res.status.args);
+
       expect(res.status.calledWith(400)).to.be.true;
       assert.strictEqual(usersAtEnd.length, usersAtStart.length);
+      assert(res.includes("expected `password` to be 3 characters or longer"))
   }
   })
 })
