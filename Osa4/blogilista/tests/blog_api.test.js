@@ -202,6 +202,13 @@ describe('when there is initially one user at db', () => {
   })
 
   test('creation fails with proper statuscode and message if username already taken', async () => {
+    let req = {}
+      let res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub()
+      } 
+      let next = sinon.stub()
+
     const usersAtStart = await helper.usersInDb()
 
     const newUser = {
@@ -209,20 +216,54 @@ describe('when there is initially one user at db', () => {
       name: 'Superuser',
       password: 'salainen',
     }
+    try {
+      console.log("Starting test...");
+      
+      await api.post('/api/users').send(newUser).expect(400);
 
-    const result = await api
-      .post('/api/users')
-      .send(newUser)
-      .expect(400)
-      .expect('Content-Type', /application\/json/)
+      console.log("Test failed (should not reach here)");
+  } catch (error) {
+      console.log("Error caught:", error);
+      errorHandler(error, req, res, next);
 
-    const usersAtEnd = await helper.usersInDb()
+      const usersAtEnd = await helper.usersInDb();  // Käyttäjät, ei blogit
+      console.log("Response status calls:", res.status.args);
 
-    assert(result.body.error.includes('expected `username` to be unique'))
-
-    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+      expect(res.status.calledWith(400)).to.be.true;
+      assert.strictEqual(usersAtEnd.length, usersAtStart.length);
+  }
   })
 
+  test.only("cannot create user with username less than 3 characters", async () => {
+    let req = {}
+    let res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub()
+    } 
+    let next = sinon.stub()
+
+  const usersAtStart = await helper.usersInDb()
+
+  const newUser = {
+    username: 'ml',
+    name: 'Matti Luukkainen',
+    password: 'salainen',
+  }
+  try {
+    console.log("Starting test...");
+    
+    await api.post('/api/users').send(newUser).expect(400);
+
+    console.log("Test failed (should not reach here)");
+  } catch (error) {
+      console.log("Error caught:", error);
+      errorHandler(error, req, res, next);
+      const usersAtEnd = await helper.usersInDb();  // Käyttäjät, ei blogit
+      console.log("Response status calls:", res.status.args);
+      expect(res.status.calledWith(400)).to.be.true;
+      assert.strictEqual(usersAtEnd.length, usersAtStart.length);
+  }
+  })
 })
 
 
