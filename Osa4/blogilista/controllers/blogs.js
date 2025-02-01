@@ -1,6 +1,7 @@
 const blogsRouter = require('express').Router()
 const { request } = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 
 blogsRouter.get('/', async (request, response) => {
@@ -16,17 +17,28 @@ blogsRouter.get('/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 blogsRouter.post('/', async (request, response, next) => {
+
   const { title, url, author, likes } = request.body
+  //const user = await User.findById(body.userId)
+  const user = await User.findOne({})
+  console.log(user.id)
+  //console.log(user._id)
+
     if (!title || !url) {
         return response.status(400).json({ error: 'title and url are required' });
     } 
   try {
-    const blog = new Blog(request.body)
-    blog
-      .save()
-      .then(result => {
-        response.status(201).json(result)
-      })
+    const blog = new Blog({
+      title: title,
+      author:author,
+      url: url,
+      likes: likes,
+      user: user.id //pitäisikö olla vain .id
+    })
+    const savedBlog = await blog.save()
+    user.blogs = user.blogs.concat(savedBlog._id) //tännekin ehkö .id
+    await user.save()
+    response.status(201).json(savedBlog)
     } catch (error) {
       next(error)
     }
