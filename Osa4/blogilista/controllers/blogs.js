@@ -45,15 +45,30 @@ blogsRouter.post('/', async (request, response, next) => {
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id) //tännekin ehkö .id
     await user.save()
-    response.status(201).json(savedBlog)
+    return response.status(201).json(savedBlog)
     } catch (error) {
       next(error)
     }
   })
 
 blogsRouter.delete("/:id", async (request, response) => {
-  await Blog.findByIdAndDelete(request.params.id)
-  response.status(204).end()
+
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken) {
+    return response.status(400).json({ error: "token needed"})
+  }
+  const blog = await Blog.findById(request.params.id)
+  console.log(decodedToken.id)
+  console.log(decodedToken)
+  console.log(blog.user)
+  console.log(blog.user.id)
+  if (blog.user.toString() === decodedToken.id.toString()) {
+    ///ja nykyisen kirjautuneen id)
+    await Blog.findByIdAndDelete(request.params.id)
+    return response.status(204).end() //lisatty return
+  } else {
+    return response.status(401).json({ error: "Not allowed to delete this blog"})
+  }
 })
 
 blogsRouter.put("/:id", async (request, response) => {

@@ -30,15 +30,24 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-const tokenExtractor = (request, response,next) => {
+const tokenExtractor = (request, response, next) => {
+  try {
+      const authorization = request.get("authorization");
 
-  const authorization = request.get('authorization')
+      if (!authorization) {
+          return response.status(401).json({ error: "token needed" }); // 401 Unauthorized on parempi statuskoodi
+      }
 
-  if (authorization && authorization.startsWith('Bearer ')) {
-    request.token =  authorization.replace('Bearer ', '')
+      if (authorization.startsWith("Bearer ")) {
+          request.token = authorization.replace("Bearer ", "");
+      }
+
+  } catch (error) {
+      return response.status(500).json({ error: "Internal Server Error" }); // Yleinen virheilmoitus
   }
-   next()
-}
+
+  next(); // Varmista, että next() aina kutsutaan
+};
 
 module.exports = {
   requestLogger,
