@@ -36,9 +36,6 @@ blogsRouter.post('/', async (request, response, next) => {
   }
   const user = await User.findById(decodedToken.id)
 
-  //console.log(user.id)
-  //console.log(user._id)
-
     if (!title || !url) {
         return response.status(400).json({ error: 'title and url are required' });
     } 
