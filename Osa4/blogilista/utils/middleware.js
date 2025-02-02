@@ -1,5 +1,6 @@
 const logger = require('./logger')
-
+const jwt = require("jsonwebtoken")
+const User = require("../models/user")
 const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
   logger.info('Path:  ', request.path)
@@ -33,25 +34,52 @@ const errorHandler = (error, request, response, next) => {
 const tokenExtractor = (request, response, next) => {
   try {
       const authorization = request.get("authorization");
-
       if (!authorization) {
           return response.status(401).json({ error: "token needed" }); // 401 Unauthorized on parempi statuskoodi
       }
-
       if (authorization.startsWith("Bearer ")) {
           request.token = authorization.replace("Bearer ", "");
       }
-
   } catch (error) {
       return response.status(500).json({ error: "Internal Server Error" }); // Yleinen virheilmoitus
   }
+  next()
+}
 
-  next(); // Varmista, että next() aina kutsutaan
+const userExtractor = async (request, response, next) => {
+    try {
+        const authorization = request.get("authorization");
+        if (!authorization || !authorization.startsWith("Bearer ")) {
+            return response.status(401).json({ error: "token needed" }); // 401 Unauthorized
+        }
+
+        const token = authorization.replace("Bearer ", "");
+        const decodedToken = jwt.verify(token, process.env.SECRET);
+
+        if (!decodedToken.id) {
+            return response.status(401).json({ error: "invalid token" });
+        }
+
+        // Haetaan käyttäjä tietokannasta
+        const user = await User.findById(decodedToken.id);
+        if (!user) {
+            return response.status(401).json({ error: "user not found" });
+        }
+
+        request.user = user; // Lisätään käyttäjä request-objektiin
+        next(); // Siirrytään seuraavaan middlewareen
+    } catch (error) {
+        console.error("userExtractor error:", error.message); // Tulosta virhe lokiin
+        return response.status(500).json({ error: "Internal Server Error" });
+    }
 };
+
+module.exports = userExtractor;
 
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
-  tokenExtractor
+  tokenExtractor,
+  userExtractor
 }

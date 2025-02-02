@@ -3,7 +3,8 @@ const { request } = require('../app')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
-
+const { userExtractor } = require('../utils/middleware')
+const { tokenExtractor } = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate("user", {name: 1, username: 1 })
@@ -18,18 +19,20 @@ blogsRouter.get('/:id', (request, response, next) => {
   })
     .catch(error => next(error))
 })
-blogsRouter.post('/', async (request, response, next) => {
+blogsRouter.post('/',tokenExtractor, userExtractor, async (request, response, next) => {
 
   const { title, url, author, likes } = request.body
   //const user = await User.findById(body.userId)
   //tähän middleware
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
-
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' })
   }
-  const user = await User.findById(decodedToken.id)
+  //const user = await User.findById(decodedToken.id)
+  const userWithToken = request.user
+  console.log(userWithToken)
+  const user = await  User.findOne( {username: userWithToken.username })
 
     if (!title || !url) {
         return response.status(400).json({ error: 'title and url are required' });
@@ -51,13 +54,17 @@ blogsRouter.post('/', async (request, response, next) => {
     }
   })
 
-blogsRouter.delete("/:id", async (request, response) => {
+blogsRouter.delete("/:id", tokenExtractor, userExtractor, async (request, response) => {
 
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken) {
     return response.status(400).json({ error: "token needed"})
   }
   const blog = await Blog.findById(request.params.id)
+
+  const userWithToken = request.user
+  const user = await  User.findOne( {username: userWithToken.username })
+
   console.log(decodedToken.id)
   console.log(decodedToken)
   console.log(blog.user)
