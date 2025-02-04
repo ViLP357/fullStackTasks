@@ -10,6 +10,9 @@ const helper = require('./test_helper.js')
 const Blog = require('../models/blog')
 const _ = require('lodash');
 const { errorHandler } = require('../utils/middleware.js')
+const { userExtractor } = require('../utils/middleware')
+const { tokenExtractor } = require('../utils/middleware')
+
 const sinon = require("sinon")
 const { expect } = require("chai")
 
@@ -49,19 +52,22 @@ describe('Initially saved blogs and data validation', () => {
   })
 })
 
-describe("Tests about post", () => {
+describe("Tests about post", tokenExtractor, userExtractor, () => {
   test("blogs can be post into /api/blogs", async () => {
     const test_blog = new Blog({
       author: "Testitestaaja",
       title: "Testailua",
       likes: 6,  // Varmista, että likes ei ole null
       url: "www.notReady"
-    });
-    
+    })
+    //const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    const token = process.env.TOKEN
+    //const decodedToken = jwt.verify(token, process.env.SECRET)
 
     await api
     .post('/api/blogs')
     .send(test_blog.toObject())
+    .set("Authorization", `Bearer ${token}`)
     .expect(201)
     .expect("Content-Type", /application\/json/)
 
@@ -71,6 +77,31 @@ describe("Tests about post", () => {
     assert(contents.includes("Testailua"))
     
     assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
+  })
+
+  test.only("blogs can't be post on /api/blogs if no token", async () => {
+    const blogsAtBeginning = helper.blogsInDb()
+    const test_blog = new Blog({
+      author: "Testitestaaja",
+      title: "Testailua",
+      likes: 6,  // Varmista, että likes ei ole null
+      url: "www.notReady"
+    })
+
+    try {
+    await api
+    .post('/api/blogs')
+    .send(test_blog.toObject())
+    .expect(401)
+
+    } catch (error) {
+    errorHandler(error, req, res, next);
+
+    expect(res.status.calledWith(401)).to.be.true;
+
+    const blogsAtEnd = helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd, blogsAtBeginning)
+    }
   })
 
   test("likes null is 0", async () => {
@@ -130,12 +161,16 @@ describe("Tests about post", () => {
   })
 })
 
-describe("Tests about delete and put", () => {
+describe("Tests about delete and put", tokenExtractor, userExtractor, () => {
   test("delete works", async () => {
     const blogsAtBeginning = await helper.blogsInDb()
     const blogToDelete = blogsAtBeginning[0]
+
+    const token = process.env.TOKEN
+
     await api
     .delete(`/api/blogs/${blogToDelete.id}`)
+    .set("Authorization", `Bearer ${token}`)
     .expect(204)
 
     const blogsAtTheEnd = await helper.blogsInDb()
@@ -201,7 +236,7 @@ describe('when there is initially one user at db', () => {
     assert(usernames.includes(newUser.username))
   })
 
-  test.only('creation fails with proper statuscode and message if username already taken', async () => {
+  test('creation fails with proper statuscode and message if username already taken', async () => {
     let req = {}
       let res = {
         status: sinon.stub().returnsThis(),
@@ -235,7 +270,7 @@ describe('when there is initially one user at db', () => {
   }
   })
 
-  test.only("cannot create user with username less than 3 characters", async () => {
+  test("cannot create user with username less than 3 characters", async () => {
     let req = {}
     let res = {
       status: sinon.stub().returnsThis(),
