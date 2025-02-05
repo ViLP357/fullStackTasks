@@ -3,6 +3,8 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { set } from 'mongoose'
+import Notification from "./components/Notification"
+import ErrorNotification from "./components/ErrorNotification"
 
 
 const App = () => {
@@ -14,6 +16,8 @@ const App = () => {
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
+  const [infoMessage, setInfoMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -45,6 +49,20 @@ const App = () => {
       setAuthor("")
       setTitle("")
       setUrl("")
+      setInfoMessage(
+        `Blog ${title} by ${author} was added succesfully`
+      )
+      setTimeout(() => {
+        setInfoMessage(null)
+      }, 5000)
+    })
+    .catch(error => {
+      setErrorMessage(
+        "Blog couldn't be added"
+      )
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     })
   }
 
@@ -63,13 +81,17 @@ const handleLogin = async (event) => {
     setUsername('')
     setPassword('')
     console.log("log in works")
+    setInfoMessage("Log in succesfully!")
+    setTimeout(() => {
+      setInfoMessage(null)
+    }, 5000)
   } catch (exception) {
     console.log("fail with log in")
-    console.log(exception)
-    //setErrorMessage('wrong credentials')
-    //setTimeout(() => {
-    //  setErrorMessage(null)
-    //}, 5000)
+    //console.log(exception)
+    setErrorMessage('wrong password or username')
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
   }
 }
 
@@ -80,6 +102,10 @@ const handleLogOut = async (event) => {
   blogService.setToken("")
   setUsername("")
   setPassword("")
+  setInfoMessage("Log out succesfully!")
+  setTimeout(() => {
+    setInfoMessage(null)
+  }, 5000)
 }
 
 
@@ -167,19 +193,24 @@ const blogForm = () => {
 }
 if (user === null) {
   return (
+    
     <div>
-    {!user && loginForm()}
+      <Notification message={infoMessage}/>
+      <ErrorNotification message={errorMessage}/>
+    {loginForm()}
     </div>
 
   )
 } else {
   return (
     <div>
+      <Notification message={infoMessage}/>
+      <ErrorNotification message={errorMessage}/>
       <h2>Blogs</h2>
       <h3> {user.name} logged in</h3>
       <button onClick={handleLogOut}>Log out</button>
-      {user && blogForm()}
-      {user && blogView()}
+      {blogForm()}
+      {blogView()}
   
   </div>
 )
