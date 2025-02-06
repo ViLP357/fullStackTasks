@@ -7,8 +7,6 @@ import Notification from "./components/Notification"
 import ErrorNotification from "./components/ErrorNotification"
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-//import Login from './services/login'
-//imprt Togglable from '.components/'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -104,7 +102,6 @@ const handleLogOut = async (event) => {
   }, 5000)
 }
 
-
 const loginForm = () => {
   return (
     <div>
@@ -145,38 +142,33 @@ const blogView = () => {
   )
 }
 
-
-
 if (user === null) {
   return (
     
     <div>
-
       <Notification message={infoMessage}/>
       <ErrorNotification message={errorMessage}/>
       {loginForm()}
    </div>
   )
 } else {
-  return (
-    <div>
-      <Notification message={infoMessage}/>
-      <ErrorNotification message={errorMessage}/>
-      <h2>Blogs</h2>
-      <h3> {user.name} logged in</h3>
-      <button onClick={handleLogOut}>Log out</button>
+    return (
+      <div>
+        <Notification message={infoMessage}/>
+        <ErrorNotification message={errorMessage}/>
+        <h2>Blogs</h2>
+        <h3> {user.name} logged in</h3>
+        <button onClick={handleLogOut}>Log out</button>
 
-      <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <BlogForm
-          createBlog={addBlog}
-        />
-      </Togglable>
-      {blogView()}
-  
-  </div>
-)
-}
-
+        <Togglable buttonLabel="new blog" ref={blogFormRef}>
+          <BlogForm
+            createBlog={addBlog}
+          />
+        </Togglable>
+        {blogView()}
+      </div>
+    )
+  }
 }
 
 export default App
