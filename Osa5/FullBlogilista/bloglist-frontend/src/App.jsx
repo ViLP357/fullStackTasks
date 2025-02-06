@@ -5,19 +5,23 @@ import loginService from './services/login'
 import { set } from 'mongoose'
 import Notification from "./components/Notification"
 import ErrorNotification from "./components/ErrorNotification"
-
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
+//import Login from './services/login'
+//imprt Togglable from '.components/'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  //const [newBlog, setNewBlog] = useState({title: "", })
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
   const [infoMessage, setInfoMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+
+  const [blogFormVisible, setBlogFormVisible] = useState(false)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -150,55 +154,37 @@ const blogView = () => {
 }
 
 const blogForm = () => {
+  const hideWhenVisible = { display: blogFormVisible ? 'none' : ""}
+  const showWhenVisible = {display : blogFormVisible ? "" : "none"}
+
   return (
     <div>
-
-      <h2>Create new</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          Title: 
-          <input 
-          type="text"
-          value={title}
-          name = "title"
-          onChange={({target}) => setTitle(target.value)}
-          />
-        </div>
-
-        <div>
-          Author: 
-          <input 
-          type="text"
-          value={author}
-          name = "author"
-          onChange={({target}) => setAuthor(target.value)}
-          />
-        </div>
-
-        <div>
-          url: 
-          <input 
-          type="text"
-          value={url}
-          name = "url"
-          onChange={({target}) => setUrl(target.value)}
-          />
-        </div>
-
-      <button type="submit">Submit</button>
-
-      </form>
+      <div style={hideWhenVisible}>
+        <button onClick={() => setBlogFormVisible(true)}>create a blog</button>
+      </div>
+      <div style = {showWhenVisible}>
+        <BlogForm
+        addBlog={addBlog}
+        setTitle={setTitle}
+        title={title}
+        setAuthor={setAuthor}
+        author={author}
+        setUrl={setUrl}
+        ulr = {url}
+        />
+        <button onClick={() => setBlogFormVisible(false)}>cancel</button>
+      </div>
     </div>
   )
 }
+
 if (user === null) {
   return (
     
     <div>
       <Notification message={infoMessage}/>
       <ErrorNotification message={errorMessage}/>
-    {loginForm()}
-    </div>
+   </div>
 
   )
 } else {
@@ -208,6 +194,11 @@ if (user === null) {
       <ErrorNotification message={errorMessage}/>
       <h2>Blogs</h2>
       <h3> {user.name} logged in</h3>
+
+      <Togglable buttonLabel="new blog">
+      {blogForm()}
+      </Togglable>
+
       <button onClick={handleLogOut}>Log out</button>
       {blogForm()}
       {blogView()}
