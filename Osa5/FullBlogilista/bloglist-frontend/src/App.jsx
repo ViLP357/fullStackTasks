@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -20,6 +20,8 @@ const App = () => {
 
   const [blogFormVisible, setBlogFormVisible] = useState(false)
 
+  const blogFormRef = useRef()
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -36,6 +38,7 @@ const App = () => {
   }, [])
 
   const addBlog = (blogObject) => {
+      blogFormRef.current.toggleVisibility()
       blogService
       .create(blogObject)
       .then(returnedBlog => {
@@ -153,7 +156,6 @@ if (user === null) {
       <ErrorNotification message={errorMessage}/>
       {loginForm()}
    </div>
-
   )
 } else {
   return (
@@ -163,7 +165,8 @@ if (user === null) {
       <h2>Blogs</h2>
       <h3> {user.name} logged in</h3>
       <button onClick={handleLogOut}>Log out</button>
-      <Togglable buttonLabel="new blog">
+
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm
           createBlog={addBlog}
         />
@@ -173,8 +176,6 @@ if (user === null) {
   </div>
 )
 }
-
-
 
 }
 
