@@ -14,12 +14,9 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [user, setUser] = useState(null)
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setUrl] = useState("")
   const [infoMessage, setInfoMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [user, setUser] = useState(null)
 
   const [blogFormVisible, setBlogFormVisible] = useState(false)
 
@@ -38,35 +35,27 @@ const App = () => {
     )  
   }, [])
 
-  const addBlog = (event) => {
-    event.preventDefault()
-    const blogObject = {
-      author: author,
-      title: title,
-      url: url,
-      likes: 0
-    }
-    blogService
-    .create(blogObject)
-    .then(returnedBlog => {
-      setBlogs(blogs.concat(returnedBlog))
-      setAuthor("")
-      setTitle("")
-      setUrl("")
-      setInfoMessage(
-        `Blog ${title} by ${author} was added succesfully`
-      )
-      setTimeout(() => {
-        setInfoMessage(null)
-      }, 5000)
-    })
-    .catch(error => {
-      setErrorMessage(
-        "Blog couldn't be added"
-      )
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+  const addBlog = (blogObject) => {
+      blogService
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+
+        setInfoMessage(
+          `Blog ${returnedBlog.title} by ${returnedBlog.author} was added succesfully`
+        )
+        setTimeout(() => {
+          setInfoMessage(null)
+        }, 5000)
+      } )
+      .catch(error => {
+        console.log(error)
+        setErrorMessage(
+          "Blog couldn't be added"
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
     })
   }
 
@@ -153,37 +142,16 @@ const blogView = () => {
   )
 }
 
-const blogForm = () => {
-  const hideWhenVisible = { display: blogFormVisible ? 'none' : ""}
-  const showWhenVisible = {display : blogFormVisible ? "" : "none"}
 
-  return (
-    <div>
-      <div style={hideWhenVisible}>
-        <button onClick={() => setBlogFormVisible(true)}>create a blog</button>
-      </div>
-      <div style = {showWhenVisible}>
-        <BlogForm
-        addBlog={addBlog}
-        setTitle={setTitle}
-        title={title}
-        setAuthor={setAuthor}
-        author={author}
-        setUrl={setUrl}
-        ulr = {url}
-        />
-        <button onClick={() => setBlogFormVisible(false)}>cancel</button>
-      </div>
-    </div>
-  )
-}
 
 if (user === null) {
   return (
     
     <div>
+
       <Notification message={infoMessage}/>
       <ErrorNotification message={errorMessage}/>
+      {loginForm()}
    </div>
 
   )
@@ -194,13 +162,12 @@ if (user === null) {
       <ErrorNotification message={errorMessage}/>
       <h2>Blogs</h2>
       <h3> {user.name} logged in</h3>
-
-      <Togglable buttonLabel="new blog">
-      {blogForm()}
-      </Togglable>
-
       <button onClick={handleLogOut}>Log out</button>
-      {blogForm()}
+      <Togglable buttonLabel="new blog">
+        <BlogForm
+          createBlog={addBlog}
+        />
+      </Togglable>
       {blogView()}
   
   </div>
