@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
+import userService from "./services/users"
 import loginService from './services/login'
 import { set } from 'mongoose'
 import Notification from "./components/Notification"
@@ -10,6 +11,7 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [users, setUsers] = useState([])
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [infoMessage, setInfoMessage] = useState(null)
@@ -32,6 +34,13 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
+    )  
+  }, [])
+
+  
+  useEffect(() => {
+    userService.getAll().then(users =>
+      setUsers( users )
     )  
   }, [])
 
@@ -133,15 +142,17 @@ const loginForm = () => {
 }
 
 const blogView = () => {
+  console.log(users)
   return (
     <div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} users={users}/>
       )}
     </div>
   )
 }
-
+console.log("u", users)
+console.log("b:", blogs)
 if (user === null) {
   return (
     
@@ -157,8 +168,7 @@ if (user === null) {
         <Notification message={infoMessage}/>
         <ErrorNotification message={errorMessage}/>
         <h2>Blogs</h2>
-        <h3> {user.name} logged in</h3>
-        <button onClick={handleLogOut}>Log out</button>
+        <h3> {user.name} logged in <button onClick={handleLogOut}>Log out</button> </h3>
 
         <Togglable buttonLabel="new blog" ref={blogFormRef}>
           <BlogForm
