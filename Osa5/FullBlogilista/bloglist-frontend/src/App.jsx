@@ -69,6 +69,32 @@ const App = () => {
     })
   }
 
+  const addLike = (blogObject) => {
+    const changedBlog = {...blogObject, likes: blogObject.likes + 1}
+
+    blogService
+    .update(blogObject.id, changedBlog)
+    .then(returnedBlog => {
+      setBlogs(blogs.map(blog => blog.id !== blogObject.id ? blog : { ...returnedBlog }))
+
+      setInfoMessage(
+        `Blog ${returnedBlog.title} by ${returnedBlog.author} was liked succesfully`
+      )
+      setTimeout(() => {
+        setInfoMessage(null)
+      }, 5000)
+    } )
+    .catch(error => {
+      console.log(error)
+      setErrorMessage(
+        "Blog couldn't be liked"
+      )
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+  })
+}
+
 const handleLogin = async (event) => {
   event.preventDefault()
     
@@ -142,17 +168,16 @@ const loginForm = () => {
 }
 
 const blogView = () => {
-  console.log(users)
+  //console.log(users)
   return (
     <div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} users={users}/>
+        <Blog key={blog.id} blog={blog} users={users} likeBlog={addLike}/>
       )}
     </div>
   )
 }
-console.log("u", users)
-console.log("b:", blogs)
+
 if (user === null) {
   return (
     
