@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react"
-const Blog = ({ blog, users, likeBlog }) => {
+const Blog = ({ blog, users, likeBlog, deleteBlog, userWithToken }) => {
   const [visible, setVisible ] = useState(false)
   const [user, setUser ] = useState(null)
 
@@ -25,18 +25,23 @@ const Blog = ({ blog, users, likeBlog }) => {
     margin: 5
   }
 
-  //console.log(blog.user)
-  //console.log(users)
-  //const user = users.filter(u => u.id === blog.user.id)
-  //console.log("user: ", user)
   const fullView = () => {
-  //if (user.length > 0)
+    //console.log(userWithToken.username)
+    //console.log(blog.user)
+    //console.log(user)
+    //console.log
+    if (userWithToken.username === user.username) {
+      console.log("oikea", blog.title)
+    }
+    else {
+      console.log("wrong", blog.title)
+    }
     return (
       <div>
       <p>{blog.url}</p>
       <p>likes: {blog.likes} <button onClick={() => likeBlog(blog)}>like</button></p>
       <p>{user? user.name : "loading"}</p>
-    
+      {userWithToken.username === user.username && <button onClick={() => deleteBlog(blog)}>delete</button>}
       </div>
     )
   }

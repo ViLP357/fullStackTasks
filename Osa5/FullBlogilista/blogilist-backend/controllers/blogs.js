@@ -11,6 +11,7 @@ router.get('/', async (request, response) => {
   response.json(blogs)
 })
 
+
 router.post('/', userExtractor, async (request, response) => {
   const blog = new Blog(request.body)
 

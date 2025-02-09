@@ -27,6 +27,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      console.log("tokenuser", user)
       blogService.setToken(user.token)
     }
   }, [])
@@ -93,6 +94,23 @@ const App = () => {
         setErrorMessage(null)
       }, 5000)
   })
+}
+
+const deleteBlog = (blogObject) => {
+  //console.log(blogObject)
+  //console.log(blogObject.id)
+  //console.log("user in deleteBlog App.jsx", user, user.token)
+  if (window.confirm("Haluatko varmasti poistaa blogin")) {
+  blogService.deleteBlog(blogObject.id, user.token)
+  .then(() => {
+    setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
+    setInfoMessage(`Blogin ${blogObject.title} poistaminen onnistui`)
+  })
+  .catch(error => {
+    console.error("Error deleting person:", error)
+    alert("Failed to delete person.")
+  })
+}
 }
 
 const handleLogin = async (event) => {
@@ -173,7 +191,7 @@ const blogView = () => {
   return (
     <div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} users={users} likeBlog={addLike}/>
+        <Blog key={blog.id} blog={blog} users={users} likeBlog={addLike} deleteBlog={deleteBlog} userWithToken={user}/>
       )}
     </div>
   )
