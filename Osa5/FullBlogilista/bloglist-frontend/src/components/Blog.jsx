@@ -1,21 +1,14 @@
-import {useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 const Blog = ({ blog, users, likeBlog, deleteBlog, userWithToken }) => {
   const [visible, setVisible ] = useState(false)
   const [user, setUser ] = useState(null)
 
   useEffect(() => {
     if (!blog?.user?.id || users.length === 0) return
-  
-    //console.log("Checking user update...");
-    //console.log("Looking for user with ID:", blog.user.id);
-    const foundUser = users.find(u => u.id === blog.user.id)
-    
-    setUser(foundUser || null);
-    //console.log("User found:", foundUser);
-  }, [blog.user.id, users])
 
-  
-  
+    const foundUser = users.find(u => u.id === blog.user.id)
+    setUser(foundUser || null)
+  }, [blog.user.id, users])
 
   const blogStyle = {
     padding: 10,
@@ -26,10 +19,6 @@ const Blog = ({ blog, users, likeBlog, deleteBlog, userWithToken }) => {
   }
 
   const fullView = () => {
-    //console.log(userWithToken.username)
-    //console.log(blog.user)
-    //console.log(user)
-    //console.log
     if (userWithToken.username === user.username) {
       console.log("oikea", blog.title)
     }
@@ -38,20 +27,20 @@ const Blog = ({ blog, users, likeBlog, deleteBlog, userWithToken }) => {
     }
     return (
       <div>
-      <p>{blog.url}</p>
-      <p>likes: {blog.likes} <button onClick={() => likeBlog(blog)}>like</button></p>
-      <p>{user? user.name : "loading"}</p>
-      {userWithToken.username === user.username && <button onClick={() => deleteBlog(blog)}>delete</button>}
+        <p>{blog.url}</p>
+        <p>likes: {blog.likes} <button onClick={() => likeBlog(blog)}>like</button></p>
+        <p>{user? user.name : "loading"}</p>
+        {userWithToken.username === user.username && <button onClick={() => deleteBlog(blog)}>delete</button>}
       </div>
     )
   }
   return (
-  <div style={blogStyle}>
-    <div>
-    {blog.title} {blog.author} <button onClick={({target}) => setVisible(!visible)}>{visible ? "close" : "view"}</button>
-    {visible && fullView()}
-  </div>  
-  </div>
+    <div style={blogStyle}>
+      <div>
+        {blog.title} {blog.author} <button onClick={({ target }) => setVisible(!visible)}>{visible ? "close" : "view"}</button>
+        {visible && fullView()}
+      </div>  
+    </div>
   )
 }
 
