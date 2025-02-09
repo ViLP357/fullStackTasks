@@ -169,6 +169,7 @@ const loginForm = () => {
 
 const blogView = () => {
   //console.log(users)
+  blogs.sort((first, second) => second.likes - first.likes)
   return (
     <div>
       {blogs.map(blog =>
