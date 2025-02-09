@@ -4,15 +4,16 @@ const Blog = ({ blog, users, likeBlog }) => {
   const [user, setUser ] = useState(null)
 
   useEffect(() => {
-    if (!blog?.user?.id || users.length === 0) return;
+    if (!blog?.user?.id || users.length === 0) return
   
     //console.log("Checking user update...");
     //console.log("Looking for user with ID:", blog.user.id);
-    const foundUser = users.find(u => u.id === blog.user.id);
+    const foundUser = users.find(u => u.id === blog.user.id)
     
     setUser(foundUser || null);
     //console.log("User found:", foundUser);
-  }, [blog.user.id, users]);
+  }, [blog.user.id, users])
+
   
   
 
