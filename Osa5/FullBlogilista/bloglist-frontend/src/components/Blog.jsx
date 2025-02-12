@@ -18,6 +18,23 @@ const Blog = ({ blog, users, likeBlog, deleteBlog, userWithToken }) => {
     margin: 5
   }
 
+  const TitlePart = () => {
+    if (!visible) {
+      return (
+        <div>
+        {blog.title} <button onClick={({ target }) => setVisible(!visible)}>{visible ? "close" : "view"}</button>
+        </div>
+      )
+    }
+  else {
+    return (
+      <div>
+      {blog.title} {blog.author} <button onClick={({ target }) => setVisible(!visible)}>{visible ? "close" : "view"}</button>
+      </div>
+    )
+  }
+  }
+
   const fullView = () => {
     if (userWithToken.username === user.username) {
       console.log("oikea", blog.title)
@@ -25,6 +42,7 @@ const Blog = ({ blog, users, likeBlog, deleteBlog, userWithToken }) => {
     else {
       console.log("wrong", blog.title)
     }
+
     return (
       <div>
         <p>{blog.url}</p>
@@ -37,7 +55,7 @@ const Blog = ({ blog, users, likeBlog, deleteBlog, userWithToken }) => {
   return (
     <div style={blogStyle}>
       <div>
-        {blog.title} {blog.author} <button onClick={({ target }) => setVisible(!visible)}>{visible ? "close" : "view"}</button>
+        <TitlePart/>
         {visible && fullView()}
       </div>  
     </div>
