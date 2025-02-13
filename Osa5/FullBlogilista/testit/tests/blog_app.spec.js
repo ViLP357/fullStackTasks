@@ -1,18 +1,22 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
+const { loginWith } = require('./helper')
 
 describe('Blog app', () => {
-  beforeEach(async ({ page, request }) => {
-    await request.post('http://localhost:3001/api/testing/reset')
-    await request.post('http://localhost:3001/api/users', {
-      data: {
-        name: 'Matti Luukkainen',
-        username: 'mluukkai',
-        password: 'salainen'
-      }
-    })
-
-    await page.goto('http://localhost:5173')
-  })
+    beforeEach(async ({ page, request }) => {
+        const resetResponse = await request.post('http://localhost:3001/api/testing/reset')
+        console.log('Reset response:', resetResponse.status())
+      
+        const userResponse = await request.post('http://localhost:3001/api/users', {
+          data: {
+            name: 'Matti Luukkainen',
+            username: 'mluukkai',
+            password: 'salainen'
+          }
+        })
+        console.log('User creation response:', userResponse.status())
+      
+        await page.goto('http://localhost:5173')
+      })
 
   test('Login form is shown', async ({ page }) => {
    const text = await page.getByText("Log in to application")
@@ -42,6 +46,24 @@ describe('Blog app', () => {
         await page.getByRole("button", {name: "login" }).click()
   
         await expect(page.getByText("Wrong password or username")).toBeVisible()
+    })
+  })
+  describe('When logged in', () => {
+    beforeEach(async ({ page, request }) => {
+        await loginWith(page, "mluukkai", "salainen")
+      })
+    test.only('a new blog can be created', async ({ page }) => {
+      await page.getByRole("button", { name: "new blog"}).click()
+      const textboxes = await page.getByRole('textbox').all()
+      
+
+      await textboxes[0].fill("test title")
+      await textboxes[1].fill("test author")
+      await textboxes[2].fill("test url")
+      await page.getByRole("button", { name: "Submit"}).click()
+
+      const texts = await page.getByText('test title').last()
+      await expect(texts).toBeVisible()
     })
   })
 })
