@@ -4,7 +4,7 @@ const { loginWith } = require('./helper')
 describe('Blog app', () => {
     beforeEach(async ({ page, request }) => {
         const resetResponse = await request.post('http://localhost:3001/api/testing/reset')
-        console.log('Reset response:', resetResponse.status())
+        //console.log('Reset response:', resetResponse.status())
       
         const userResponse = await request.post('http://localhost:3001/api/users', {
           data: {
@@ -13,7 +13,7 @@ describe('Blog app', () => {
             password: 'salainen'
           }
         })
-        console.log('User creation response:', userResponse.status())
+        //console.log('User creation response:', userResponse.status())
       
         await page.goto('http://localhost:5173')
       })
@@ -52,10 +52,9 @@ describe('Blog app', () => {
     beforeEach(async ({ page, request }) => {
         await loginWith(page, "mluukkai", "salainen")
       })
-    test.only('a new blog can be created', async ({ page }) => {
+    test('a new blog can be created', async ({ page }) => {
       await page.getByRole("button", { name: "new blog"}).click()
       const textboxes = await page.getByRole('textbox').all()
-      
 
       await textboxes[0].fill("test title")
       await textboxes[1].fill("test author")
@@ -64,6 +63,23 @@ describe('Blog app', () => {
 
       const texts = await page.getByText('test title').last()
       await expect(texts).toBeVisible()
+    })
+
+    test.only("a blog can be liked", async ({ page }) => {
+      await page.getByRole("button", { name: "new blog"}).click()
+      const textboxes = await page.getByRole('textbox').all()
+      await textboxes[0].fill("test title")
+      await textboxes[1].fill("test author")
+      await textboxes[2].fill("test url")
+      await page.getByRole("button", { name: "Submit"}).click()
+
+      await page.getByRole("button", {name: "view"}).click()
+      const text1 = page.getByText('0')
+      await expect(text1).toBeVisible()
+      await page.getByRole("button", {name: "like"}).click()
+
+      const text2 = page.getByText('1')
+      await expect(text2).toBeVisible()
     })
   })
 })
