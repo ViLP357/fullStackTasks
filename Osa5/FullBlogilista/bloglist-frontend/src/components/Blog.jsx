@@ -21,7 +21,7 @@ const Blog = ({ blog, users, likeBlog, deleteBlog, userWithToken }) => {
   const TitlePart = () => {
     if (!visible) {
       return (
-        <div>
+        <div className = "blog-list">
         {blog.title} <button onClick={({ target }) => setVisible(!visible)}>{visible ? "close" : "view"}</button>
         </div>
       )

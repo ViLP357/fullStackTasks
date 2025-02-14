@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { loginWith } = require('./helper')
+const { loginWith, create } = require('./helper')
 
 describe('Blog app', () => {
     beforeEach(async ({ page, request }) => {
@@ -53,25 +53,14 @@ describe('Blog app', () => {
         await loginWith(page, "mluukkai", "salainen")
       })
     test('a new blog can be created', async ({ page }) => {
-      await page.getByRole("button", { name: "new blog"}).click()
-      const textboxes = await page.getByRole('textbox').all()
-
-      await textboxes[0].fill("test title")
-      await textboxes[1].fill("test author")
-      await textboxes[2].fill("test url")
-      await page.getByRole("button", { name: "Submit"}).click()
+      await create(page)
 
       const texts = await page.getByText('test title').last()
       await expect(texts).toBeVisible()
     })
 
-    test.only("a blog can be liked", async ({ page }) => {
-      await page.getByRole("button", { name: "new blog"}).click()
-      const textboxes = await page.getByRole('textbox').all()
-      await textboxes[0].fill("test title")
-      await textboxes[1].fill("test author")
-      await textboxes[2].fill("test url")
-      await page.getByRole("button", { name: "Submit"}).click()
+    test("a blog can be liked", async ({ page }) => {
+      await create(page)
 
       await page.getByRole("button", {name: "view"}).click()
       const text1 = page.getByText('0')
@@ -81,5 +70,25 @@ describe('Blog app', () => {
       const text2 = page.getByText('1')
       await expect(text2).toBeVisible()
     })
+    test.only("a blog can be deleted", async ({ page }) => {
+      await create(page);
+    
+      await page.getByRole("button", { name: "view" }).click();
+    
+      // Rekisteröi dialogin käsittely ennen klikkausta
+      page.on("dialog", async (dialog) => {
+        console.log(dialog.message()); // Tarkista, että se tunnistaa dialogin
+        await dialog.accept();
+      });
+    
+      await page.getByRole("button", { name: "delete" }).last().click();
+      await expect(page.locator(".blog-title")).toHaveCount(0);
+
+      //const text = await page.locator(".blog-list")
+      //await expect(text).not.toContainText("test title");
+
+
+    });
+    
   })
 })
