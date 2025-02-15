@@ -53,7 +53,7 @@ const Blog = ({ blog, users, likeBlog, deleteBlog, userWithToken }) => {
     )
   }
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       <div>
         <TitlePart/>
         {visible && fullView()}

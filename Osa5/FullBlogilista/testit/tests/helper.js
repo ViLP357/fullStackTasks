@@ -14,4 +14,14 @@ const create  =async (page) => {
       await page.getByRole("button", { name: "Submit"}).click()
 }
 
-  export { loginWith, create }
+const createWithTitle  =async (page, title) => {
+  await page.getByRole("button", { name: "new blog"}).click()
+  const textboxes = await page.getByRole('textbox').all()
+
+  await textboxes[0].fill(title)
+  await textboxes[1].fill("test author")
+  await textboxes[2].fill("test url")
+  await page.getByRole("button", { name: "Submit"}).click()
+}
+
+  export { loginWith, create, createWithTitle }

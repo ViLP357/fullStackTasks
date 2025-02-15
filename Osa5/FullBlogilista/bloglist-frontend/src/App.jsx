@@ -181,7 +181,7 @@ const blogView = () => {
   //console.log(users)
   blogs.sort((first, second) => second.likes - first.likes)
   return (
-    <div>
+    <div className="blogs">
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} users={users} likeBlog={addLike} deleteBlog={deleteBlog} userWithToken={user}/>
       )}

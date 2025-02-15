@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { loginWith, create } = require('./helper')
+const { loginWith, create, createWithTitle } = require('./helper')
 
 describe('Blog app', () => {
     beforeEach(async ({ page, request }) => {
@@ -78,9 +78,9 @@ describe('Blog app', () => {
         await dialog.accept()
       })
       await page.getByRole("button", { name: "delete" }).last().click()
-      await expect(page.locator(".blog-title")).toHaveCount(0)
+      await expect(page.locator(".blog-list")).toHaveCount(0)
     })
-    test.only("only person who added can see a delete blog button", async ({page, request}) => {
+    test("only person who added can see a delete blog button", async ({page, request}) => {
       await create(page)
       await page.getByRole("button", {name: 'view'}).click()
 
@@ -105,6 +105,25 @@ describe('Blog app', () => {
       const button2 = page.getByRole("button", {name: "delete"})
       await expect(button2).not.toBeVisible()
     })
+    test.only("blogs are ordered correctly", async ({page}) => {
+      await createWithTitle(page, "test title 1")
+      await createWithTitle(page, "test title 2")
+      await createWithTitle(page, "test title 3")
     
+      await page.getByRole("button", {name: "view" }).first().click()
+      //await page.getByRole("button", {name: "like" }).click()
+      await page.getByRole("button", {name: "close" }).click()
+      
+      await page.getByRole("button", {name: "view" }).last().click()
+      await page.getByRole("button", {name: "like" }).click()
+      await page.getByRole("button", {name: "like" }).click()
+      await page.getByRole("button", {name: "close" }).click()
+ 
+      //const blogs2 = await page.locator(".blog").all()
+    
+      
+      await expect(page.locator(".blog").first()).toContainText("test title 3")
+      await expect(page.locator(".blog").last()).toContainText("test title 2")
+    })
   })
 })
