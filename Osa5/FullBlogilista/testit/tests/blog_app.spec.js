@@ -70,25 +70,41 @@ describe('Blog app', () => {
       const text2 = page.getByText('1')
       await expect(text2).toBeVisible()
     })
-    test.only("a blog can be deleted", async ({ page }) => {
-      await create(page);
-    
-      await page.getByRole("button", { name: "view" }).click();
-    
-      // Rekisteröi dialogin käsittely ennen klikkausta
+    test("a blog can be deleted", async ({ page }) => {
+      await create(page)
+      await page.getByRole("button", { name: "view" }).click()
       page.on("dialog", async (dialog) => {
-        console.log(dialog.message()); // Tarkista, että se tunnistaa dialogin
-        await dialog.accept();
-      });
-    
-      await page.getByRole("button", { name: "delete" }).last().click();
-      await expect(page.locator(".blog-title")).toHaveCount(0);
+        console.log(dialog.message())
+        await dialog.accept()
+      })
+      await page.getByRole("button", { name: "delete" }).last().click()
+      await expect(page.locator(".blog-title")).toHaveCount(0)
+    })
+    test.only("only person who added can see a delete blog button", async ({page, request}) => {
+      await create(page)
+      await page.getByRole("button", {name: 'view'}).click()
 
-      //const text = await page.locator(".blog-list")
-      //await expect(text).not.toContainText("test title");
+      const button = page.getByRole("button", {name: "delete"})
+      await expect(button).toBeVisible()
 
+      await page.getByRole("button", {name: 'Log out'}).click()
+      const userResponse = await request.post('http://localhost:3001/api/users', {
+        data: {
+          name: 'Viivi',
+          username: 'viivip',
+          password: 'banana'
+        }
+      })
 
-    });
+      await page.getByRole("textbox").first().fill("viivip")
+      await page.getByRole("textbox").last().fill("banana")
+      await page.getByRole("button", {name: "login" }).click()
+
+      await page.getByRole("button", {name: 'view'}).click()
+
+      const button2 = page.getByRole("button", {name: "delete"})
+      await expect(button2).not.toBeVisible()
+    })
     
   })
 })
