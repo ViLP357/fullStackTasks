@@ -15,4 +15,7 @@ const calculateBmi = (a: number, b: number) => {
     }
 }
 
-console.log(calculateBmi(180, 74))
+const a: number = Number(process.argv[2]);
+const b: number = Number(process.argv[3]);
+//console.log(a, b);
+console.log(calculateBmi(a, b))
