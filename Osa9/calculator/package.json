@@ -9,11 +9,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "ts-node": "ts-node",
+  
     "calculateBmi": "ts-node bmiCalculator.ts",
-    "calculateExercises": "ts-node calculateExercises"
+    "calculateExercises": "ts-node calculateExercises",
+    "start": "ts-node index.ts",
+    "dev": "ts-node-dev index.ts"
   },
   "devDependencies": {
+    "@types/express": "^5.0.1",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
   }
 }
