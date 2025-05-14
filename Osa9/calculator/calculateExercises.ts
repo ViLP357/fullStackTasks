@@ -16,8 +16,8 @@ const parseArguments = (args: string[]) : arguments => {
     if (args.length < 4){
         throw new Error("Not enough arguments");
     }
-    let trg = args[2];
-    let nums : number[] = [];
+    const trg = args[2];
+    const nums : number[] = [];
     //console.log("Arvot:")
     for (let i = 3; i<args.length; i++) {
         if (!isNaN(Number(args[i]))) {
@@ -35,26 +35,25 @@ const parseArguments = (args: string[]) : arguments => {
     } else {
         throw new Error("Provided value was not a numbr");
     }
-}
+};
 
-const CalculateExercises = (list : number[], target: number) : ExerciseObject => {
-    let avrg: number;
+export const CalculateExercises = (list : number[], target: number) : ExerciseObject => {
     let trD: number = 0;
     let sum : number = 0;
     let suc : boolean;
     let descText : string;
     let rtng : number;
-    for (var val of list) {
+    for (const val of list) {
         if (val != 0 ){
             trD ++;
         }
         sum += val;
     }
-    avrg = sum / list.length;
+    const avrg : number = sum / list.length;
     if (avrg >= target) {
         suc = true;
         rtng = 3;
-        descText = "Excellent!"
+        descText = "Excellent!";
 
     } else {
         suc = false;
@@ -75,11 +74,13 @@ const CalculateExercises = (list : number[], target: number) : ExerciseObject =>
         ratingDescription: descText,
         target: target,
         avarage: avrg
-    }
-}
+    };
+};
 
 //let target : number = 2;
 //let list : number[] = [3, 0, 2, 4.5, 0, 3, 1];
 
-const {target, list} = parseArguments(process.argv);
-console.log(CalculateExercises(list, target));
+if (require.main === module) {
+    const {target, list} = parseArguments(process.argv);
+    console.log(CalculateExercises(list, target));
+}

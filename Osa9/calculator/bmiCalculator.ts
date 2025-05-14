@@ -19,13 +19,13 @@ export const calculateBmi = (a: number, b: number) => {
     else {
         return "Significant owerweight";
     }
-}
+};
 
 if (require.main === module) {
     console.log("true main");
     const a: number = Number(process.argv[2]);
     const b: number = Number(process.argv[3]);
     //console.log(a, b);
-    console.log(calculateBmi(a, b))
+    console.log(calculateBmi(a, b));
 }
 //export {calculateBmi};
