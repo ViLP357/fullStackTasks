@@ -1,6 +1,6 @@
-import { DiagnoseObject } from "../src/types";
+import { Diagnosis } from "../src/types";
 
-const diagnoseObjects: DiagnoseObject[] = [
+const diagnoseObjects: Diagnosis[] = [
   
   {
     "code": "M24.2",

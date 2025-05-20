@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
-    "dev": "ts-node-dev index.ts",
+    "dev": "ts-node-dev src/index.ts",
     "start": "ts-node src/index.ts",
     "lint": "eslint ."
   },
@@ -24,6 +24,8 @@
     "typescript-eslint": "^8.32.1"
   },
   "dependencies": {
+    "@types/cors": "^2.8.18",
+    "cors": "^2.8.5",
     "express": "^5.1.0"
   }
 }
