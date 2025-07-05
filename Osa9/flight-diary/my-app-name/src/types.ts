@@ -3,5 +3,6 @@ export interface Diary {
     weather: string,
     visibility: string,
     id: number,
+    comment: string
     //comment: string   
 }

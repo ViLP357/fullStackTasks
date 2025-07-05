@@ -9,3 +9,10 @@ export const getAllDiaries = ()=> {
         .get<Diary[]>(baseUrl)
         .then(response => response.data);
 }
+
+export const addDiary = (diaryToAdd: Diary) => {
+    console.log("here 4");
+    return axios
+        .post<Diary[]>(baseUrl, diaryToAdd)
+        .then(response => response.data);
+}
