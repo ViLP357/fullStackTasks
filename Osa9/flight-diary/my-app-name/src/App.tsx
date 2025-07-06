@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-//import axios from 'axios';
 import { addDiary, getAllDiaries } from './diaryService';
-//import DiaryForm from './DiaryForm.tsx';
-
 import type  { Diary } from './types';
+//import axios, { AxiosError } from 'axios';
 
 
 const App = () => {
@@ -13,6 +11,7 @@ const App = () => {
   const [newDate, setNewDate] = useState('');
   const [newVisibility, setNewVisibility] = useState('');
   const [newComment, setNewComment] = useState('');
+  const [newMessage, setNewMessage] = useState('');
 
   useEffect(() => {
     getAllDiaries().then(data => {
@@ -32,22 +31,33 @@ const App = () => {
       comment: newComment
     }  
 
-    addDiary(diaryToAdd).then(data => {
-      setDiaries(diaries.concat(data))
-    })
-
+  
+      addDiary(diaryToAdd).then(data => {
+        setDiaries(diaries.concat(data))
+        
+      })
+      .catch((er) => {
+        console.log(er)
+        setNewMessage("Error: " + er.response.data)
+        setTimeout(() => {
+          setNewMessage('')
+      }, 5000)})
+    
     //setDiaries(diaries.concat(diaryToAdd));
     setNewWeather('')
     setNewVisibility('')
     setNewDate('')
     setNewComment('')
+  
   }
       //  <DiaryForm></DiaryForm>
     //<h2>Diary entries</h2>
       //<div>
    return (
     <div>
+      
       <h4>Add new entry</h4>
+      <p style={{color: 'red'}}>{`${newMessage}`}</p>
       <form onSubmit={diaryCreation}>
         Date:
         <input value = {newDate}
