@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { addDiary, getAllDiaries } from './diaryService';
 import type  { Diary } from './types';
-//import axios, { AxiosError } from 'axios';
 
 
 const App = () => {
-  //const [newDiary, setNewDiary] = useState('');
   const [diaries, setDiaries] = useState<Diary[]>([]);
   const [newWeather, setNewWeather] = useState('');
   const [newDate, setNewDate] = useState('');
@@ -42,17 +40,12 @@ const App = () => {
         setTimeout(() => {
           setNewMessage('')
       }, 5000)})
-    
-    //setDiaries(diaries.concat(diaryToAdd));
-    setNewWeather('')
-    setNewVisibility('')
+
     setNewDate('')
     setNewComment('')
   
   }
-      //  <DiaryForm></DiaryForm>
-    //<h2>Diary entries</h2>
-      //<div>
+
    return (
     <div>
       
@@ -60,24 +53,36 @@ const App = () => {
       <p style={{color: 'red'}}>{`${newMessage}`}</p>
       <form onSubmit={diaryCreation}>
         Date:
-        <input value = {newDate}
+        <input type='date' value = {newDate}
           onChange={(event) => setNewDate(event.target.value)}
         ></input>
+
+
+        <div>
         Visibility:
-        <input value = {newVisibility}
-          onChange={(event) => setNewVisibility(event.target.value)}
-        ></input>
+        <input type= "radio" name="visibility" onChange={() => setNewVisibility("great")}/>great
+        <input type= "radio" name="visibility" onChange={() => setNewVisibility("good")}/>good 
+        <input type= "radio" name="visibility" onChange={() => setNewVisibility("ok")}/>ok 
+        <input type= "radio" name="visibility" onChange={() => setNewVisibility("poor")}/>poor 
+        </div>
+
+        <div>
         Weather:
-        <input value = {newWeather}
-          onChange={(event) => setNewWeather(event.target.value)}
-        ></input>
+        <input type= "radio" name="weather" onChange={() => setNewWeather("sunny")}/>sunny
+        <input type= "radio" name="weather" onChange={() => setNewWeather("rainy")}/>rainy
+        <input type= "radio" name="weather" onChange={() => setNewWeather("cloudy")}/>cloudy
+        <input type= "radio" name="weather" onChange={() => setNewWeather("stormy")}/>stormy
+        <input type= "radio" name="weather" onChange={() => setNewWeather("windy")}/>windy 
+        </div>
+
+
         Comment:  
         <input value = {newComment}
           onChange={(event) => setNewComment(event.target.value)}
         ></input>
         <button type='submit' >add</button>
       </form>
-
+      <h2>Diary entries</h2>
      <ul>
         {diaries.map(diary =>
           <li key={diary.id}> <h4>{diary.date} </h4> 
