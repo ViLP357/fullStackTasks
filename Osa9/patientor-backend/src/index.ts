@@ -19,7 +19,6 @@ app.use('/api/diagnoses', diagnosisRoute);
 
 app.use('/api/patients', patientRoute);
 
-//app.use('/api/patients', )
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
