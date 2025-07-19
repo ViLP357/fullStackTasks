@@ -11,6 +11,7 @@ const router = express.Router();
 router.get('/', (_req, res) => {
     //console.log(patientService.getNonSensitivePatientData());
     res.send(patientService.getNonSensitivePatientData());
+    //res.send(patientService.getPatients());
     //res.send({test: "res"});
 });
 

@@ -1,7 +1,9 @@
 import patientData from '../../data/patients';
 import {v1 as uuid } from "uuid";
+import { isValidEntryType } from '../utils';
+import { NonSensitivePatientData, Patient, newEntry,} from '../types';
 
-import { NonSensitivePatientData, Patient, newEntry } from '../types';
+
 
 const getPatients = (): Patient[] => {
     return patientData;
@@ -10,7 +12,14 @@ const getPatients = (): Patient[] => {
 const getOnePatient = (idReq: string): Patient | null => {
     
     const patient = patientData.find(p => p.id === idReq);
-    if (patient) {
+   
+    if (patient && patient.entries) {
+       patient.entries.forEach((entry) => {
+            if (!isValidEntryType(entry)) {
+            console.error('Virheellinen entry.type:', entry);
+            }
+        });
+        //if (patient.entries && patient.entries[0].type === EntryType.HealthCheckEntry )
         return patient;
     } 
     return null;

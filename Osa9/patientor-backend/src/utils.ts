@@ -12,3 +12,11 @@ export const newEntrySchema = z.object({
 export const toNewPatient = (object: unknown) : newEntry => {
     return newEntrySchema.parse(object);
 };
+
+const EntryTypeOnlySchema = z.object({
+  type: z.enum(['Hospital', 'OccupationalHealthcare', 'HealthCheck']),
+});
+
+export const isValidEntryType = (entry: unknown): boolean => {
+  return EntryTypeOnlySchema.safeParse(entry).success;
+};
