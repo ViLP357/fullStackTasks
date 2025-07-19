@@ -14,7 +14,8 @@ const PatientPage =  () => {
           occupation: '',
           gender: Gender.Other,
           ssn: '',
-          dateOfBirth: ''  
+          dateOfBirth: '',
+          entries: []
     };
 
     const [ newPatient, setNewPatient ] = useState<Patient>(empty);

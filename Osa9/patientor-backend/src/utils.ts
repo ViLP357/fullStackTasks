@@ -7,7 +7,7 @@ export const newEntrySchema = z.object({
   ssn: z.string(),
   dateOfBirth: z.string().date(),
   occupation: z.string(), //optional()
-  entries: z.array(z.string())
+  entries: z.array(z.string()).optional()
 });
 export const toNewPatient = (object: unknown) : newEntry => {
     return newEntrySchema.parse(object);
