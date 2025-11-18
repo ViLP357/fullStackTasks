@@ -7,13 +7,13 @@ const store = createStore(counterReducer)
 const App = () => {
   return (
     <div>
-      <button onClick={() => store.dispatch({ type: 'GOOD' })}>good</button>
-      <button>ok</button>
-      <button>bad</button>
-      <button>reset stats</button>
+      <button style={{color: 'green', margin: '5px'}} onClick={() => store.dispatch({ type: 'GOOD' })}>good</button>
+      <button style={{color: 'orange', margin: '5px'}} onClick={()=>store.dispatch({type:'OK'})}>ok</button>
+      <button style={{color: 'red', margin: '5px'}} onClick={() => store.dispatch({type:'BAD'})}>bad</button>
+      <button onClick={() => store.dispatch({type:'RESET'})}>reset stats</button>
       <div>good {store.getState().good}</div>
-      <div>ok</div>
-      <div>bad</div>
+      <div>ok {store.getState().ok}</div>
+      <div>bad {store.getState().bad}</div>
     </div>
   )
 }
