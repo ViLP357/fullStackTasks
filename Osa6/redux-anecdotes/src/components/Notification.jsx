@@ -13,8 +13,9 @@ const Notification = () => {
     borderWidth: 1,
     marginBottom: 10
   }
-
-  return <div style={style}>{message}</div>
+  if (message != '') {
+    return (<div style={style}>{message}</div>)
+  }
 }
 
 export default Notification
