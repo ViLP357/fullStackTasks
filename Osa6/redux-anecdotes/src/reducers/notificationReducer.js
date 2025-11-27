@@ -10,8 +10,8 @@ const notificationSlice = createSlice({
             const message = action.payload
             return message
         }, 
-        deleteNotification(state, action) {
-            console.log(action.payload, state)
+        deleteNotification() {//state, action
+            //console.log(action.payload, state)
             return ''
         }
     }
