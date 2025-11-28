@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit"
-//import { current } from '@reduxjs/toolkit'
 import anecdoteServce from '../services/anecdotes'
 
 const anecdoteSlice = createSlice({
@@ -10,10 +9,7 @@ const anecdoteSlice = createSlice({
       
       const id = action.payload.id
       console.log(id)
-      //const votedAnecdote = action.payload
-      //console.log("anecdote", votedAnecdote)
       const votedAnecdote = state.find(n => n.id === id)
-      //console.log(current(votedAnecdote))
       const changedAnecdote = {
         ...votedAnecdote,
         votes: votedAnecdote.votes + 1
