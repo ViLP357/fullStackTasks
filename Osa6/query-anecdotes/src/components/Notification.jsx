@@ -12,12 +12,15 @@ const Notification = () => {
     borderWidth: 1,
     marginBottom: 5
   }
-  
+  if (notification != '') {
   return (
     <div style={style}>
       {notification}
     </div>
   )
+  } else {
+      return
+  }
 }
 
 export default Notification
