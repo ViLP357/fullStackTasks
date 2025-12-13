@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate} from 'react-router-dom'
+import { useField } from './hooks'
 
 const Menu = () => {
   const padding = {
@@ -49,17 +50,25 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
-  const navigate = useNavigate()
+  //const [content, setContent] = useState('')
+  //const [author, setAuthor] = useState('')
+  //const [info, setInfo] = useState('')
 
+  const contentField = useField('content')
+  const authorField = useField('author')
+  const infoField = useField('info')
+
+  const navigate = useNavigate()
+  
   const handleSubmit = (e) => {
     e.preventDefault()
+    //console.log(contentField.value)
+    //console.log(props)
+
     props.addNew({
-      content,
-      author,
-      info,
+      content: contentField.value,
+      author: authorField.value,
+      info: infoField.value,
       votes: 0
     })
     navigate('/')
@@ -72,15 +81,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input name='content' type={contentField.type} value={contentField.value} onChange={contentField.onChange} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input name='author'type={authorField.type} value={authorField.value} onChange={authorField.onChange} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input name='info'type={infoField.type} value={infoField.value} onChange={infoField.onChange} />
         </div>
         <button>create</button>
       </form>
@@ -120,6 +129,7 @@ const App = () => {
   ])
 
   const [notification, setNotification] = useState('')
+
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
